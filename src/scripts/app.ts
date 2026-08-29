@@ -79,8 +79,12 @@ class QiblaApp {
   private kaabaMarker: LeafletType.Marker | null = null;
   private geodesicLine: LeafletType.Polyline | null = null;
 
+  // Saved & Recent Locations
+  private savedLocations: Array<{ name: string; lat: number; lng: number; timestamp: number }> = [];
+
   constructor() {
     this.restoreSavedLocation();
+    this.loadSavedLocations();
     this.loadSettings();
     this.initTheme();
   }
@@ -120,6 +124,7 @@ class QiblaApp {
     } catch {
       // Ignore
     }
+    this.addLocationToHistory(this.userLocationName, this.userLat, this.userLng);
   }
 
   public async init(): Promise<void> {
@@ -128,6 +133,7 @@ class QiblaApp {
     // Synchronous immediate calculation on exact coordinates
     this.updateCalculations();
     this.startPrayerTimesClock();
+    this.renderSavedLocationsUI();
     this.registerServiceWorker();
 
     // Dynamically load Leaflet for the interactive map
@@ -1363,34 +1369,23 @@ class QiblaApp {
       this.requestGPSLocation(true);
     });
 
-    // Quick City Pills
-    document.querySelectorAll('.quick-city-pill').forEach((el) => {
-      el.addEventListener('click', () => {
-        const lat = parseFloat(el.getAttribute('data-lat') || '0');
-        const lng = parseFloat(el.getAttribute('data-lng') || '0');
-        const name = el.getAttribute('data-name') || 'City';
-        this.setLocation(name, lat, lng);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
+    // Save & Bookmark current location
+    document.getElementById('btn-save-current-location')?.addEventListener('click', () => {
+      this.addLocationToHistory(this.userLocationName, this.userLat, this.userLng);
+      const saveBtn = document.getElementById('btn-save-current-location');
+      if (saveBtn) {
+        saveBtn.innerHTML = '<span>✓</span><span>Saved!</span>';
+        setTimeout(() => {
+          saveBtn.innerHTML = '<span>⭐</span><span>Save This Place</span>';
+        }, 1500);
+      }
     });
 
-    // Table City Row Clicks (Global Qibla & Prayer Times Table)
-    document.querySelectorAll('.table-city-row').forEach((row) => {
-      row.addEventListener('click', () => {
-        const lat = parseFloat(row.getAttribute('data-lat') || '0');
-        const lng = parseFloat(row.getAttribute('data-lng') || '0');
-        const name = row.getAttribute('data-name') || 'Selected City';
-        this.setLocation(name, lat, lng);
-
-        const prayerSection = document.getElementById('section-prayer');
-        if (prayerSection) {
-          prayerSection.scrollIntoView({ behavior: 'smooth' });
-          prayerSection.classList.add('ring-2', 'ring-emerald-500', 'transition-all');
-          setTimeout(() => {
-            prayerSection.classList.remove('ring-2', 'ring-emerald-500');
-          }, 1600);
-        }
-      });
+    // Clear saved history
+    document.getElementById('btn-clear-recent-locations')?.addEventListener('click', () => {
+      if (confirm('Clear your saved and recent locations history?')) {
+        this.clearSavedLocationsHistory();
+      }
     });
 
     // Share action
@@ -1524,10 +1519,144 @@ class QiblaApp {
     }
   }
 
-  public openNearbyMosques(): void {
-    // Open Google Maps search for mosques near current exact lat,lng
-    const url = `https://www.google.com/maps/search/mosques/@${this.userLat},${this.userLng},14z`;
-    window.open(url, '_blank', 'noopener,noreferrer');
+  private loadSavedLocations(): void {
+    try {
+      const saved = localStorage.getItem('checkqibla_saved_locations');
+      if (saved) {
+        this.savedLocations = JSON.parse(saved);
+      }
+    } catch {
+      this.savedLocations = [];
+    }
+  }
+
+  private addLocationToHistory(name: string, lat: number, lng: number): void {
+    if (!name || isNaN(lat) || isNaN(lng)) return;
+    // Don't add duplicate if coordinates match within ~1km
+    this.savedLocations = this.savedLocations.filter(
+      (loc) => Math.hypot(loc.lat - lat, loc.lng - lng) > 0.01 && loc.name !== name
+    );
+    this.savedLocations.unshift({
+      name,
+      lat,
+      lng,
+      timestamp: Date.now()
+    });
+    // Keep up to 10 most recent places
+    if (this.savedLocations.length > 10) {
+      this.savedLocations = this.savedLocations.slice(0, 10);
+    }
+    try {
+      localStorage.setItem('checkqibla_saved_locations', JSON.stringify(this.savedLocations));
+    } catch {}
+    this.renderSavedLocationsUI();
+  }
+
+  private renderSavedLocationsUI(): void {
+    // 1. Render Pills under search bar
+    const pillsContainer = document.getElementById('recent-locations-pills');
+    if (pillsContainer) {
+      if (this.savedLocations.length === 0) {
+        pillsContainer.innerHTML = `<span class="text-[11px] text-[#888888] dark:text-[#737373]">Current: ${this.userLocationName.split(',')[0]}</span>`;
+      } else {
+        pillsContainer.innerHTML = this.savedLocations
+          .slice(0, 6)
+          .map(
+            (loc) => `
+          <button
+            type="button"
+            class="saved-location-pill rounded-full bg-[#f5f5f5] dark:bg-[#1a1a1a] border border-[#ebebeb] dark:border-[#262626] px-2.5 py-0.5 text-[#4d4d4d] dark:text-[#a1a1a1] hover:bg-[#ebebeb] dark:hover:bg-[#262626] hover:text-[#171717] dark:hover:text-white transition-colors cursor-pointer font-medium"
+            data-lat="${loc.lat}"
+            data-lng="${loc.lng}"
+            data-name="${loc.name}"
+          >
+            📍 ${loc.name.split(',')[0]}
+          </button>
+        `
+          )
+          .join('');
+
+        pillsContainer.querySelectorAll('.saved-location-pill').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const lat = parseFloat(btn.getAttribute('data-lat') || '0');
+            const lng = parseFloat(btn.getAttribute('data-lng') || '0');
+            const name = btn.getAttribute('data-name') || 'Selected Location';
+            this.setLocation(name, lat, lng);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        });
+      }
+    }
+
+    // 2. Render Table in Section 5
+    const tableBody = document.getElementById('saved-locations-table-body');
+    if (tableBody) {
+      const locationsToShow = this.savedLocations.length > 0 ? this.savedLocations : [{
+        name: this.userLocationName,
+        lat: this.userLat,
+        lng: this.userLng,
+        timestamp: Date.now()
+      }];
+
+      tableBody.innerHTML = locationsToShow
+        .map((loc) => {
+          const bearing = calculateQiblaDirection(loc.lat, loc.lng);
+          const cardinal = getCompassCardinal(bearing);
+          const dist = calculateDistanceToKaaba(loc.lat, loc.lng, this.settings.unit);
+          const isCurrent = Math.hypot(loc.lat - this.userLat, loc.lng - this.userLng) < 0.01;
+
+          return `
+            <tr class="saved-loc-row hover:bg-[#fafafa] dark:hover:bg-[#181818] transition-colors ${isCurrent ? 'bg-emerald-50/50 dark:bg-emerald-950/20 font-semibold' : ''}">
+              <td class="p-3">
+                <div class="flex items-center gap-2">
+                  <span class="text-rose-500">📍</span>
+                  <span class="text-[#171717] dark:text-white">${loc.name}</span>
+                  ${isCurrent ? '<span class="px-1.5 py-0.2 rounded bg-emerald-500 text-white text-[9px] font-mono">ACTIVE</span>' : ''}
+                </div>
+              </td>
+              <td class="p-3 text-[#888888] dark:text-[#737373] text-[11px]">
+                ${loc.lat.toFixed(4)}°, ${loc.lng.toFixed(4)}°
+              </td>
+              <td class="p-3 text-emerald-600 dark:text-emerald-400 font-bold">
+                ${bearing.toFixed(1)}° (${cardinal})
+              </td>
+              <td class="p-3 text-[#171717] dark:text-[#ededed]">
+                ${dist.toLocaleString(undefined, { maximumFractionDigits: 0 })} ${this.settings.unit}
+              </td>
+              <td class="p-3 text-right">
+                <button
+                  type="button"
+                  class="btn-load-saved-loc inline-block px-2.5 py-1 rounded-md bg-[#171717] dark:bg-white text-white dark:text-[#171717] text-[10px] font-sans font-semibold hover:opacity-90 transition-opacity cursor-pointer"
+                  data-lat="${loc.lat}"
+                  data-lng="${loc.lng}"
+                  data-name="${loc.name}"
+                >
+                  ${isCurrent ? 'Current Fix ✓' : 'Load Location →'}
+                </button>
+              </td>
+            </tr>
+          `;
+        })
+        .join('');
+
+      tableBody.querySelectorAll('.btn-load-saved-loc').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const lat = parseFloat(btn.getAttribute('data-lat') || '0');
+          const lng = parseFloat(btn.getAttribute('data-lng') || '0');
+          const name = btn.getAttribute('data-name') || 'Selected Location';
+          this.setLocation(name, lat, lng);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+    }
+  }
+
+  private clearSavedLocationsHistory(): void {
+    this.savedLocations = [];
+    try {
+      localStorage.removeItem('checkqibla_saved_locations');
+    } catch {}
+    this.renderSavedLocationsUI();
   }
 
   private registerServiceWorker(): void {

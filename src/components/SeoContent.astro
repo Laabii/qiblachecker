@@ -146,111 +146,45 @@
       </div>
     </div>
 
-    <!-- Section 5: Global Qibla Direction & Live Prayer Times Reference Table -->
+    <!-- Section 5: User Saved & Frequent Locations Reference Table -->
     <div class="space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <h3 class="text-xl font-semibold text-[#171717] dark:text-white tracking-tight">
-          Global Qibla Direction & Prayer Times Reference
-        </h3>
-        <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-500/30 px-2.5 py-1 rounded-full self-start sm:self-auto">
-          👆 Tap any city below to load live timings
-        </span>
+        <div>
+          <h3 class="text-xl font-semibold text-[#171717] dark:text-white tracking-tight flex items-center gap-2">
+            <span>📍</span>
+            <span>Your Saved & Frequent Locations</span>
+          </h3>
+          <p class="text-xs text-[#888888] dark:text-[#737373] mt-0.5">
+            Your saved and recently checked locations. Tap any place to instantly load its live Qibla compass bearing and 5 daily prayer times.
+          </p>
+        </div>
+        <button
+          id="btn-clear-recent-locations"
+          type="button"
+          class="text-[11px] font-mono text-[#888888] hover:text-rose-500 transition-colors self-start sm:self-auto cursor-pointer"
+          title="Clear search history"
+        >
+          🗑️ Clear History
+        </button>
       </div>
-      <p>
-        Tap any location in the table below to instantly calculate and load its real-time Qibla compass bearing, Great-Circle route, and 5 daily prayer times:
-      </p>
+
       <div class="overflow-x-auto rounded-xl border border-[#ebebeb] dark:border-[#262626]">
         <table class="w-full text-left text-xs font-mono">
           <thead class="bg-[#fafafa] dark:bg-[#171717] border-b border-[#ebebeb] dark:border-[#262626] text-[#171717] dark:text-white">
             <tr>
-              <th class="p-3">Location</th>
-              <th class="p-3">State / Country</th>
-              <th class="p-3">Qibla Bearing</th>
-              <th class="p-3">Distance</th>
+              <th class="p-3">Location Name</th>
+              <th class="p-3">Coordinates</th>
+              <th class="p-3">Qibla Direction</th>
+              <th class="p-3">Distance to Kaaba</th>
               <th class="p-3 text-right">Action</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-[#ebebeb] dark:divide-[#262626] bg-white dark:bg-[#121212] text-[#4d4d4d] dark:text-[#ededed]">
-            <tr class="table-city-row hover:bg-emerald-50/70 dark:hover:bg-emerald-950/40 cursor-pointer transition-colors" data-lat="11.9818" data-lng="75.6669" data-name="Iritty, Kerala, India">
-              <td class="p-3 font-semibold text-[#171717] dark:text-white flex items-center gap-1.5">
-                <span class="text-emerald-500">📍</span> Iritty
+          <tbody id="saved-locations-table-body" class="divide-y divide-[#ebebeb] dark:divide-[#262626] bg-white dark:bg-[#121212] text-[#4d4d4d] dark:text-[#ededed]">
+            <!-- Dynamically populated via JavaScript from user's history -->
+            <tr>
+              <td colspan="5" class="p-4 text-center text-xs text-[#888888] dark:text-[#737373]">
+                Loading your saved locations...
               </td>
-              <td class="p-3">Kannur, Kerala</td>
-              <td class="p-3 text-emerald-600 dark:text-emerald-400 font-bold">293.3° (WNW)</td>
-              <td class="p-3">3,982 km</td>
-              <td class="p-3 text-right"><span class="inline-block px-2 py-0.5 rounded bg-[#171717] dark:bg-white text-white dark:text-[#171717] text-[10px] font-sans font-medium">View Times &rarr;</span></td>
-            </tr>
-            <tr class="table-city-row hover:bg-emerald-50/70 dark:hover:bg-emerald-950/40 cursor-pointer transition-colors" data-lat="11.8745" data-lng="75.3704" data-name="Kannur, Kerala, India">
-              <td class="p-3 font-semibold text-[#171717] dark:text-white flex items-center gap-1.5">
-                <span class="text-emerald-500">📍</span> Kannur Town
-              </td>
-              <td class="p-3">Kerala, India</td>
-              <td class="p-3 text-emerald-600 dark:text-emerald-400 font-bold">293.4° (WNW)</td>
-              <td class="p-3">3,978 km</td>
-              <td class="p-3 text-right"><span class="inline-block px-2 py-0.5 rounded bg-[#171717] dark:bg-white text-white dark:text-[#171717] text-[10px] font-sans font-medium">View Times &rarr;</span></td>
-            </tr>
-            <tr class="table-city-row hover:bg-emerald-50/70 dark:hover:bg-emerald-950/40 cursor-pointer transition-colors" data-lat="11.7491" data-lng="75.4890" data-name="Thalassery, Kerala, India">
-              <td class="p-3 font-semibold text-[#171717] dark:text-white flex items-center gap-1.5">
-                <span class="text-emerald-500">📍</span> Thalassery
-              </td>
-              <td class="p-3">Kannur, Kerala</td>
-              <td class="p-3 text-emerald-600 dark:text-emerald-400 font-bold">293.3° (WNW)</td>
-              <td class="p-3">3,988 km</td>
-              <td class="p-3 text-right"><span class="inline-block px-2 py-0.5 rounded bg-[#171717] dark:bg-white text-white dark:text-[#171717] text-[10px] font-sans font-medium">View Times &rarr;</span></td>
-            </tr>
-            <tr class="table-city-row hover:bg-emerald-50/70 dark:hover:bg-emerald-950/40 cursor-pointer transition-colors" data-lat="9.9312" data-lng="76.2673" data-name="Kochi, Kerala, India">
-              <td class="p-3 font-semibold text-[#171717] dark:text-white flex items-center gap-1.5">
-                <span class="text-emerald-500">📍</span> Kochi / Cochin
-              </td>
-              <td class="p-3">Kerala, India</td>
-              <td class="p-3 text-emerald-600 dark:text-emerald-400 font-bold">292.8° (WNW)</td>
-              <td class="p-3">4,050 km</td>
-              <td class="p-3 text-right"><span class="inline-block px-2 py-0.5 rounded bg-[#171717] dark:bg-white text-white dark:text-[#171717] text-[10px] font-sans font-medium">View Times &rarr;</span></td>
-            </tr>
-            <tr class="table-city-row hover:bg-emerald-50/70 dark:hover:bg-emerald-950/40 cursor-pointer transition-colors" data-lat="28.6139" data-lng="77.2090" data-name="New Delhi, India">
-              <td class="p-3 font-semibold text-[#171717] dark:text-white flex items-center gap-1.5">
-                <span class="text-emerald-500">📍</span> New Delhi
-              </td>
-              <td class="p-3">India</td>
-              <td class="p-3 text-emerald-600 dark:text-emerald-400 font-bold">262.5° (W)</td>
-              <td class="p-3">3,845 km</td>
-              <td class="p-3 text-right"><span class="inline-block px-2 py-0.5 rounded bg-[#171717] dark:bg-white text-white dark:text-[#171717] text-[10px] font-sans font-medium">View Times &rarr;</span></td>
-            </tr>
-            <tr class="table-city-row hover:bg-emerald-50/70 dark:hover:bg-emerald-950/40 cursor-pointer transition-colors" data-lat="25.2048" data-lng="55.2708" data-name="Dubai, United Arab Emirates">
-              <td class="p-3 font-semibold text-[#171717] dark:text-white flex items-center gap-1.5">
-                <span class="text-emerald-500">📍</span> Dubai
-              </td>
-              <td class="p-3">UAE</td>
-              <td class="p-3 text-emerald-600 dark:text-emerald-400 font-bold">259.8° (W)</td>
-              <td class="p-3">1,630 km</td>
-              <td class="p-3 text-right"><span class="inline-block px-2 py-0.5 rounded bg-[#171717] dark:bg-white text-white dark:text-[#171717] text-[10px] font-sans font-medium">View Times &rarr;</span></td>
-            </tr>
-            <tr class="table-city-row hover:bg-emerald-50/70 dark:hover:bg-emerald-950/40 cursor-pointer transition-colors" data-lat="51.5074" data-lng="-0.1278" data-name="London, United Kingdom">
-              <td class="p-3 font-semibold text-[#171717] dark:text-white flex items-center gap-1.5">
-                <span class="text-emerald-500">📍</span> London
-              </td>
-              <td class="p-3">United Kingdom</td>
-              <td class="p-3 text-emerald-600 dark:text-emerald-400 font-bold">118.9° (ESE)</td>
-              <td class="p-3">4,792 km</td>
-              <td class="p-3 text-right"><span class="inline-block px-2 py-0.5 rounded bg-[#171717] dark:bg-white text-white dark:text-[#171717] text-[10px] font-sans font-medium">View Times &rarr;</span></td>
-            </tr>
-            <tr class="table-city-row hover:bg-emerald-50/70 dark:hover:bg-emerald-950/40 cursor-pointer transition-colors" data-lat="40.7128" data-lng="-74.0060" data-name="New York, USA">
-              <td class="p-3 font-semibold text-[#171717] dark:text-white flex items-center gap-1.5">
-                <span class="text-emerald-500">📍</span> New York
-              </td>
-              <td class="p-3">United States</td>
-              <td class="p-3 text-emerald-600 dark:text-emerald-400 font-bold">58.5° (ENE)</td>
-              <td class="p-3">10,298 km</td>
-              <td class="p-3 text-right"><span class="inline-block px-2 py-0.5 rounded bg-[#171717] dark:bg-white text-white dark:text-[#171717] text-[10px] font-sans font-medium">View Times &rarr;</span></td>
-            </tr>
-            <tr class="table-city-row hover:bg-emerald-50/70 dark:hover:bg-emerald-950/40 cursor-pointer transition-colors" data-lat="-6.2088" data-lng="106.8456" data-name="Jakarta, Indonesia">
-              <td class="p-3 font-semibold text-[#171717] dark:text-white flex items-center gap-1.5">
-                <span class="text-emerald-500">📍</span> Jakarta
-              </td>
-              <td class="p-3">Indonesia</td>
-              <td class="p-3 text-emerald-600 dark:text-emerald-400 font-bold">295.2° (WNW)</td>
-              <td class="p-3">7,915 km</td>
-              <td class="p-3 text-right"><span class="inline-block px-2 py-0.5 rounded bg-[#171717] dark:bg-white text-white dark:text-[#171717] text-[10px] font-sans font-medium">View Times &rarr;</span></td>
             </tr>
           </tbody>
         </table>

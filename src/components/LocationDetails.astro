@@ -127,16 +127,24 @@
       <!-- Populated dynamically via JS -->
     </div>
 
-    <!-- Quick Pill Suggestions -->
+    <!-- Dynamic User Recent & Frequent Locations Container -->
     <div class="mt-3 flex flex-wrap items-center gap-1.5 text-xs text-[#888888]">
-      <span class="font-mono text-[11px] text-[#4d4d4d] dark:text-[#a1a1a1]">Quick Select:</span>
-      <button type="button" class="quick-city-pill rounded-full bg-[#f5f5f5] dark:bg-[#1a1a1a] px-2.5 py-0.5 text-[#4d4d4d] dark:text-[#a1a1a1] hover:bg-[#ebebeb] dark:hover:bg-[#262626] hover:text-[#171717] dark:hover:text-white transition-colors cursor-pointer font-medium" data-lat="11.8745" data-lng="75.3704" data-name="Kannur, Kerala, India">📍 Kannur</button>
-      <button type="button" class="quick-city-pill rounded-full bg-[#f5f5f5] dark:bg-[#1a1a1a] px-2.5 py-0.5 text-[#4d4d4d] dark:text-[#a1a1a1] hover:bg-[#ebebeb] dark:hover:bg-[#262626] hover:text-[#171717] dark:hover:text-white transition-colors cursor-pointer" data-lat="11.2588" data-lng="75.7804" data-name="Kozhikode, Kerala, India">Calicut (Kozhikode)</button>
-      <button type="button" class="quick-city-pill rounded-full bg-[#f5f5f5] dark:bg-[#1a1a1a] px-2.5 py-0.5 text-[#4d4d4d] dark:text-[#a1a1a1] hover:bg-[#ebebeb] dark:hover:bg-[#262626] hover:text-[#171717] dark:hover:text-white transition-colors cursor-pointer" data-lat="11.0510" data-lng="76.0711" data-name="Malappuram, Kerala, India">Malappuram</button>
-      <button type="button" class="quick-city-pill rounded-full bg-[#f5f5f5] dark:bg-[#1a1a1a] px-2.5 py-0.5 text-[#4d4d4d] dark:text-[#a1a1a1] hover:bg-[#ebebeb] dark:hover:bg-[#262626] hover:text-[#171717] dark:hover:text-white transition-colors cursor-pointer" data-lat="9.9312" data-lng="76.2673" data-name="Kochi, Kerala, India">Kochi</button>
-      <button type="button" class="quick-city-pill rounded-full bg-[#f5f5f5] dark:bg-[#1a1a1a] px-2.5 py-0.5 text-[#4d4d4d] dark:text-[#a1a1a1] hover:bg-[#ebebeb] dark:hover:bg-[#262626] hover:text-[#171717] dark:hover:text-white transition-colors cursor-pointer" data-lat="8.5241" data-lng="76.9366" data-name="Thiruvananthapuram, Kerala, India">Trivandrum</button>
-      <button type="button" class="quick-city-pill rounded-full bg-[#f5f5f5] dark:bg-[#1a1a1a] px-2.5 py-0.5 text-[#4d4d4d] dark:text-[#a1a1a1] hover:bg-[#ebebeb] dark:hover:bg-[#262626] hover:text-[#171717] dark:hover:text-white transition-colors cursor-pointer" data-lat="21.4225" data-lng="39.8262" data-name="Makkah, Saudi Arabia">Makkah</button>
-      <button type="button" class="quick-city-pill rounded-full bg-[#f5f5f5] dark:bg-[#1a1a1a] px-2.5 py-0.5 text-[#4d4d4d] dark:text-[#a1a1a1] hover:bg-[#ebebeb] dark:hover:bg-[#262626] hover:text-[#171717] dark:hover:text-white transition-colors cursor-pointer" data-lat="25.2048" data-lng="55.2708" data-name="Dubai, UAE">Dubai</button>
+      <span class="font-mono text-[11px] text-[#4d4d4d] dark:text-[#a1a1a1] flex items-center gap-1">
+        <span>🕒</span>
+        <span>Recent Places:</span>
+      </span>
+      <div id="recent-locations-pills" class="flex flex-wrap items-center gap-1.5">
+        <!-- Dynamically rendered from localStorage -->
+      </div>
+      <button
+        id="btn-save-current-location"
+        type="button"
+        class="rounded-full bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700/60 px-2.5 py-0.5 text-amber-700 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors cursor-pointer font-medium flex items-center gap-1"
+        title="Bookmark current location"
+      >
+        <span>⭐</span>
+        <span>Save This Place</span>
+      </button>
     </div>
   </div>
 </section>
