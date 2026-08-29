@@ -143,6 +143,16 @@ class QiblaApp {
 
     // Attempt GPS auto-locate
     this.requestGPSLocation(false);
+
+    // Auto-start compass orientation sensors
+    this.startCompassSensors();
+
+    // On iOS 13+, permissions require a user touch gesture. Catch first touch anywhere on screen.
+    const onFirstUserInteraction = () => {
+      this.startCompassSensors();
+    };
+    window.addEventListener('touchstart', onFirstUserInteraction, { once: true, passive: true });
+    window.addEventListener('click', onFirstUserInteraction, { once: true });
   }
 
   /* ----------------------------------------------------
@@ -804,13 +814,19 @@ class QiblaApp {
     if (diagSensorSupport) diagSensorSupport.textContent = 'Active (Connected)';
 
     const orientationHandler = (event: DeviceOrientationEvent) => {
-      this.hasSensorFired = true;
       let heading: number | null = null;
 
+      // iOS Safari (webkitCompassHeading is 0..360 where 0 is True/Magnetic North)
       if ('webkitCompassHeading' in event && typeof (event as unknown as { webkitCompassHeading: number }).webkitCompassHeading === 'number') {
-        heading = (event as unknown as { webkitCompassHeading: number }).webkitCompassHeading;
-      } else if (event.alpha !== null) {
-        heading = 360 - event.alpha;
+        const iosHeading = (event as unknown as { webkitCompassHeading: number }).webkitCompassHeading;
+        if (!isNaN(iosHeading) && iosHeading !== 0) {
+          this.hasSensorFired = true;
+          heading = iosHeading;
+        }
+      } else if (event.alpha !== null && !isNaN(event.alpha)) {
+        // Android / standard W3C DeviceOrientation (alpha: 0..360 counter-clockwise)
+        this.hasSensorFired = true;
+        heading = (360 - event.alpha) % 360;
       }
 
       if (heading !== null && !isNaN(heading)) {
@@ -821,9 +837,8 @@ class QiblaApp {
 
     if ('ondeviceorientationabsolute' in window) {
       window.addEventListener('deviceorientationabsolute', orientationHandler as EventListener, true);
-    } else {
-      window.addEventListener('deviceorientation', orientationHandler as EventListener, true);
     }
+    window.addEventListener('deviceorientation', orientationHandler as EventListener, true);
 
     this.startCompassRenderLoop();
 
