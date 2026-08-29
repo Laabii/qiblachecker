@@ -4,7 +4,7 @@
 
 <section id="section-compass" class="scroll-mt-20 py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
   <!-- Mode Tab Pills (DESIGN.md tab-ghost) -->
-  <div class="flex items-center justify-center gap-1.5 mb-6 p-1 rounded-full bg-[#f5f5f5] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] max-w-sm mx-auto shadow-inner transition-colors duration-200">
+  <div class="flex items-center justify-center gap-1.5 mb-6 p-1 rounded-full bg-[#f5f5f5] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] max-w-xs mx-auto shadow-inner transition-colors duration-200">
     <button
       id="mode-tab-compass"
       type="button"
@@ -18,13 +18,6 @@
       class="flex-1 py-1.5 px-3 rounded-full text-xs font-medium text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white transition-all cursor-pointer"
     >
       Pointer Arrow
-    </button>
-    <button
-      id="mode-tab-solar"
-      type="button"
-      class="flex-1 py-1.5 px-3 rounded-full text-xs font-medium text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white transition-all cursor-pointer"
-    >
-      Sun Alignment
     </button>
   </div>
 
@@ -183,31 +176,6 @@
             <circle cx="120" cy="150" r="10" fill="#ffffff" class="dark:fill-[#171717]" stroke="#171717" class="dark:stroke-white" stroke-width="3" />
           </g>
         </svg>
-      </div>
-
-      <!-- Dial Container 3: Mode = Sun & Shadow Alignment -->
-      <div id="compass-solar-mode" class="hidden absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
-        <div class="relative w-full h-full flex items-center justify-center">
-          <svg id="svg-solar-dial" viewBox="0 0 200 200" class="w-full h-full">
-            <circle cx="100" cy="100" r="90" fill="none" stroke="#ebebeb" class="dark:stroke-[#262626]" stroke-width="1.5" stroke-dasharray="3,3" />
-            
-            <g id="solar-sun-ray" style="transform-origin: 100px 100px; transform: rotate(180deg);">
-              <line x1="100" y1="100" x2="100" y2="20" stroke="#f59e0b" stroke-width="2.5" />
-              <circle cx="100" cy="18" r="9" fill="#fef3c7" class="dark:fill-[#2e1065]" stroke="#f59e0b" stroke-width="2" />
-              <text x="100" y="22" text-anchor="middle" font-size="10" fill="#d97706">☀️</text>
-            </g>
-
-            <g id="solar-qibla-ray" style="transform-origin: 100px 100px; transform: rotate(0deg);">
-              <line x1="100" y1="100" x2="100" y2="25" stroke="#10b981" stroke-width="3" stroke-dasharray="3,3" />
-              <polygon points="100,10 94,26 106,26" fill="#10b981" />
-            </g>
-
-            <circle cx="100" cy="100" r="7" fill="#171717" class="dark:fill-white" stroke="#ffffff" class="dark:stroke-[#171717]" stroke-width="2" />
-          </svg>
-          <div class="absolute bottom-2 inset-x-0 text-center">
-            <span id="solar-sun-altitude-text" class="text-[11px] font-mono text-[#888888] dark:text-[#737373]">Sun Alt: Calculating...</span>
-          </div>
-        </div>
       </div>
     </div>
 

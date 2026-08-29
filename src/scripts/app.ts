@@ -35,7 +35,7 @@ interface AppSettings {
   unit: 'km' | 'mi';
   prayerMethod: CalculationMethod;
   asrSchool: AsrJuristic;
-  mode: 'compass' | 'arrow' | 'solar';
+  mode: 'compass' | 'arrow';
   theme: 'system' | 'light' | 'dark';
   tolerance: number;
 }
@@ -663,7 +663,6 @@ class QiblaApp {
       svgArrow.style.transform = `rotate(${this.currentQiblaAngle}deg)`;
     }
 
-    this.updateSolarCalculations();
     this.updatePrayerTimesDisplay();
     this.updateMapLayers();
   }
@@ -957,21 +956,19 @@ class QiblaApp {
     }
   }
 
-  public switchDisplayMode(mode: 'compass' | 'arrow' | 'solar'): void {
+  public switchDisplayMode(mode: 'compass' | 'arrow'): void {
     this.settings.mode = mode;
     this.saveSettings();
 
     const compassDialMode = document.getElementById('compass-dial-mode');
     const compassArrowMode = document.getElementById('compass-arrow-mode');
-    const compassSolarMode = document.getElementById('compass-solar-mode');
 
     const tabCompass = document.getElementById('mode-tab-compass');
     const tabArrow = document.getElementById('mode-tab-arrow');
-    const tabSolar = document.getElementById('mode-tab-solar');
     const navModeText = document.getElementById('nav-mode-text');
 
     const resetTabs = () => {
-      [tabCompass, tabArrow, tabSolar].forEach((t) => {
+      [tabCompass, tabArrow].forEach((t) => {
         if (t) {
           t.className = 'flex-1 py-1.5 px-3 rounded-full text-xs font-medium text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white transition-all cursor-pointer';
         }
@@ -982,7 +979,6 @@ class QiblaApp {
 
     if (compassDialMode) compassDialMode.classList.add('hidden');
     if (compassArrowMode) compassArrowMode.classList.add('hidden');
-    if (compassSolarMode) compassSolarMode.classList.add('hidden');
 
     if (mode === 'compass') {
       if (compassDialMode) compassDialMode.classList.remove('hidden');
@@ -997,10 +993,6 @@ class QiblaApp {
       if (svgArrow && !this.hasSensorFired) {
         svgArrow.style.transform = `rotate(${this.currentQiblaAngle}deg)`;
       }
-    } else if (mode === 'solar') {
-      if (compassSolarMode) compassSolarMode.classList.remove('hidden');
-      if (tabSolar) tabSolar.className = 'flex-1 py-1.5 px-3 rounded-full text-xs font-medium text-[#171717] dark:text-white bg-white dark:bg-[#262626] shadow-xs transition-all cursor-pointer';
-      if (navModeText) navModeText.textContent = 'Solar Alignment';
     }
   }
 
@@ -1171,8 +1163,6 @@ class QiblaApp {
     // Mode tabs
     document.getElementById('mode-tab-compass')?.addEventListener('click', () => this.switchDisplayMode('compass'));
     document.getElementById('mode-tab-arrow')?.addEventListener('click', () => this.switchDisplayMode('arrow'));
-    document.getElementById('mode-tab-solar')?.addEventListener('click', () => this.switchDisplayMode('solar'));
-    document.getElementById('btn-switch-solar')?.addEventListener('click', () => this.switchDisplayMode('solar'));
 
     // Enable compass / Detect Location
     document.getElementById('btn-enable-compass')?.addEventListener('click', () => {
@@ -1212,12 +1202,6 @@ class QiblaApp {
       const input = document.getElementById('city-search-input');
       input?.focus();
       input?.scrollIntoView({ behavior: 'smooth' });
-    });
-    document.getElementById('btn-alert-solar')?.addEventListener('click', () => {
-      this.hideAlertBanner();
-      this.switchDisplayMode('solar');
-      const solarSection = document.getElementById('section-solar');
-      solarSection?.scrollIntoView({ behavior: 'smooth' });
     });
 
     // Welcome & Language Selection Modal
