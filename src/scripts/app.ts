@@ -1231,6 +1231,9 @@ class QiblaApp {
     document.getElementById('btn-map-nearby-mosques')?.addEventListener('click', () => {
       this.openNearbyMosques();
     });
+    document.getElementById('btn-hero-nearby-mosques')?.addEventListener('click', () => {
+      this.openNearbyMosques();
+    });
 
     // Modals
     document.getElementById('btn-troubleshoot')?.addEventListener('click', () => this.showTroubleshootModal());
