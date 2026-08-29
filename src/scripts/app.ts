@@ -902,9 +902,7 @@ class QiblaApp {
   }
 
   private updateAlignmentState(isFacing: boolean, relativeAngle: number): void {
-    const statusBadge = document.getElementById('status-badge');
-    const statusDot = document.getElementById('status-indicator-dot');
-    const statusText = document.getElementById('status-text');
+    const liveTitle = document.getElementById('live-guidance-title');
     const turnInstruction = document.getElementById('turn-instruction');
     const halo = document.getElementById('qibla-aligned-halo');
     const outerBezel = document.getElementById('compass-outer-bezel');
@@ -918,14 +916,12 @@ class QiblaApp {
         if (this.settings.vibration) audioFeedback.triggerHaptic(180);
       }
 
-      if (statusBadge) {
-        statusBadge.className = 'inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-500 shadow-xs text-xs font-mono text-emerald-800 dark:text-emerald-300 animate-pulse';
+      if (liveTitle) {
+        liveTitle.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 flex items-center justify-center gap-1.5 animate-pulse"><span>✓</span> Facing Holy Kaaba</span>`;
       }
-      if (statusDot) statusDot.className = 'h-2 w-2 rounded-full bg-emerald-500';
-      if (statusText) statusText.textContent = 'ALIGNED WITH HOLY KAABA';
       if (turnInstruction) {
-        turnInstruction.textContent = `You are facing the exact Qibla direction (${this.currentQiblaAngle.toFixed(1)}°)`;
-        turnInstruction.className = 'text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-1';
+        turnInstruction.textContent = `You are aligned with Makkah. Ready for Salah.`;
+        turnInstruction.className = 'text-sm sm:text-base font-semibold text-emerald-600 dark:text-emerald-400 mt-1 transition-all';
       }
       if (halo) halo.style.opacity = '1';
       if (outerBezel) outerBezel.classList.add('border-emerald-500', 'animate-qibla-aligned');
@@ -934,18 +930,22 @@ class QiblaApp {
     } else {
       this.isAligned = false;
 
-      if (statusBadge) {
-        statusBadge.className = 'inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#121212] border border-[#ebebeb] dark:border-[#262626] shadow-xs text-xs font-mono text-[#4d4d4d] dark:text-[#a1a1a1]';
-      }
-      if (statusDot) statusDot.className = 'h-2 w-2 rounded-full bg-blue-500';
-      if (statusText) statusText.textContent = 'Rotate device towards Kaaba';
-
       const turnDir = relativeAngle > 0 ? 'Right ↻' : 'Left ↺';
-      const degAbs = Math.abs(relativeAngle).toFixed(1);
+      const degAbs = Math.round(Math.abs(relativeAngle));
+
+      if (liveTitle) {
+        if (this.hasSensorFired) {
+          liveTitle.innerHTML = `Turn <span class="text-blue-600 dark:text-blue-400 font-bold">${degAbs}° ${turnDir}</span>`;
+        } else {
+          liveTitle.textContent = `Rotate Phone Towards Kaaba`;
+        }
+      }
 
       if (turnInstruction) {
-        turnInstruction.textContent = `Turn ${degAbs}° ${turnDir} to face Kaaba`;
-        turnInstruction.className = 'text-xs font-medium text-[#4d4d4d] dark:text-[#a1a1a1] mt-1';
+        turnInstruction.textContent = this.hasSensorFired
+          ? `Rotate your body until the needle turns green`
+          : `Hold phone flat to activate live compass guidance`;
+        turnInstruction.className = 'text-sm sm:text-base font-medium text-[#737373] dark:text-[#a1a1a1] mt-1 transition-all';
       }
       if (halo) halo.style.opacity = '0';
       if (outerBezel) outerBezel.classList.remove('border-emerald-500', 'animate-qibla-aligned');

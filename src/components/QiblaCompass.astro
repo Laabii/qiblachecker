@@ -32,17 +32,23 @@
   <div class="relative flex flex-col items-center">
     <!-- Live Direction Status Banner -->
     <div id="qibla-status-box" class="mb-4 text-center transition-all duration-300">
-      <div id="status-badge" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#121212] border border-[#ebebeb] dark:border-[#262626] shadow-xs text-xs font-mono text-[#4d4d4d] dark:text-[#a1a1a1]">
-        <span id="status-indicator-dot" class="h-2 w-2 rounded-full bg-blue-500"></span>
-        <span id="status-text">Hold device flat & tap "Start Compass"</span>
+      <!-- Live Dynamic Action Title -->
+      <div class="flex items-center justify-center gap-2">
+        <h2 id="live-guidance-title" class="text-2xl sm:text-3xl font-semibold tracking-tight text-[#171717] dark:text-white transition-all">
+          Rotate Phone Towards Kaaba
+        </h2>
       </div>
-      <div class="mt-2 flex items-baseline justify-center gap-2">
-        <span id="qibla-bearing-display" class="text-4xl sm:text-5xl font-semibold tracking-[-0.04em] text-[#171717] dark:text-white">--°</span>
-        <span id="qibla-cardinal-display" class="text-sm font-mono text-[#888888] dark:text-[#737373]">--</span>
-      </div>
-      <p id="turn-instruction" class="text-xs font-medium text-[#4d4d4d] dark:text-[#a1a1a1] mt-1">
-        Relative turn instruction will appear here
+
+      <!-- Live Real-Time Turn Instruction -->
+      <p id="turn-instruction" class="text-sm sm:text-base font-medium text-blue-600 dark:text-blue-400 mt-1 transition-all">
+        Hold your phone flat and rotate to align
       </p>
+
+      <!-- Target Bearing & Makkah Info Badge -->
+      <div class="mt-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f5f5f5] dark:bg-[#1a1a1a] border border-[#ebebeb] dark:border-[#262626] text-xs font-mono text-[#737373] dark:text-[#a1a1a1] shadow-2xs">
+        <span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+        <span>Kaaba Azimuth: <strong id="qibla-bearing-display" class="text-[#171717] dark:text-white font-semibold">--°</strong> <span id="qibla-cardinal-display">--</span></span>
+      </div>
     </div>
 
     <!-- The Circular Compass Vessel -->
