@@ -76,15 +76,55 @@ class AudioFeedbackManager {
   }
 
   /**
-   * Trigger device vibration if supported and enabled
+   * Trigger device vibration & tactile haptics across Android & iOS
    */
   public triggerHaptic(duration: number = 180): void {
+    // 1. Standard W3C Vibration API (Android / Chrome)
     if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
       try {
-        navigator.vibrate(duration);
+        // Crisp double-pulse haptic pattern (tap-tap)
+        navigator.vibrate([60, 40, 80]);
       } catch {
-        // Haptics unavailable
+        // Ignore
       }
+    }
+
+    // 2. iOS Taptic Acoustic Transducer Pulse (iOS Safari fallback)
+    // Safari iOS blocks navigator.vibrate, but a steep sub-bass impulse (55Hz-65Hz)
+    // drives the iPhone acoustic chamber to create physical tactile vibration in the hand.
+    try {
+      const ctx = this.getAudioContext();
+      if (!ctx) return;
+
+      const t = ctx.currentTime;
+      const hapticOsc = ctx.createOscillator();
+      const hapticGain = ctx.createGain();
+
+      hapticOsc.type = 'triangle';
+      hapticOsc.frequency.setValueAtTime(58, t); // 58 Hz sub-bass sweet spot for iPhone chassis
+      hapticOsc.frequency.exponentialRampToValueAtTime(42, t + 0.08);
+
+      hapticGain.gain.setValueAtTime(0.001, t);
+      hapticGain.gain.linearRampToValueAtTime(0.9, t + 0.015);
+      hapticGain.gain.exponentialRampToValueAtTime(0.001, t + 0.09);
+
+      hapticOsc.connect(hapticGain);
+      hapticGain.connect(ctx.destination);
+
+      hapticOsc.start(t);
+      hapticOsc.stop(t + 0.1);
+    } catch {
+      // Ignore
+    }
+  }
+
+  /**
+   * Unlock and pre-warm audio context on first user touch gesture
+   */
+  public unlockAudio(): void {
+    const ctx = this.getAudioContext();
+    if (ctx && ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
     }
   }
 }

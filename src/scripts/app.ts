@@ -152,6 +152,7 @@ class QiblaApp {
 
     // On iOS 13+, permissions require a user touch gesture. Catch first touch anywhere on screen.
     const onFirstUserInteraction = () => {
+      audioFeedback.unlockAudio();
       this.startCompassSensors();
     };
     window.addEventListener('touchstart', onFirstUserInteraction, { once: true, passive: true });
@@ -1210,6 +1211,7 @@ class QiblaApp {
     });
 
     document.getElementById('btn-start-qibla-finder')?.addEventListener('click', () => {
+      audioFeedback.unlockAudio();
       const langSelect = document.getElementById('welcome-language-select') as HTMLSelectElement | null;
       if (langSelect) {
         localStorage.setItem('checkqibla_lang', langSelect.value);
