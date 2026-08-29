@@ -1,0 +1,77 @@
+---
+// prayer.astro - Dedicated High-Precision Daily Islamic Prayer Times Page
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import LocationOverlay from '../components/LocationOverlay.astro';
+import WelcomeModal from '../components/WelcomeModal.astro';
+import PrayerTimesBar from '../components/PrayerTimesBar.astro';
+import LocationDetails from '../components/LocationDetails.astro';
+import Footer from '../components/Footer.astro';
+import TroubleshootingModal from '../components/TroubleshootingModal.astro';
+import SettingsModal from '../components/SettingsModal.astro';
+---
+
+<Layout
+  title="Prayer Times Today - Exact Salah Timings & Countdown | Qibla Locator"
+  description="Get 100% accurate daily Islamic prayer times (Fajr, Dhuhr, Asr, Maghrib, Isha) with live countdown to next Salah based on your exact GPS location."
+  canonical="https://checkqibla.vercel.app/prayer"
+>
+  <WelcomeModal />
+  <LocationOverlay />
+  <Navbar />
+
+  <main class="flex-1 flex flex-col items-center w-full py-6">
+    <!-- Hero / Header for Prayer Times -->
+    <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center mb-4">
+      <div class="inline-flex items-center gap-2 rounded-full border border-emerald-300 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1 text-xs font-mono text-emerald-800 dark:text-emerald-300 mb-3">
+        <span>🕌</span>
+        <span>Daily Salah Schedule</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#171717] dark:text-white mb-2">
+        Daily Islamic Prayer Times
+      </h1>
+      <p class="text-sm sm:text-base text-[#666666] dark:text-[#a1a1a1] max-w-2xl mx-auto">
+        Accurate prayer times calculated from your exact coordinates with live next Salah countdown and juristic calculation methods.
+      </p>
+    </section>
+
+    <!-- Location & City Selector -->
+    <LocationDetails />
+
+    <!-- Main Prayer Times Schedule Card & Countdown -->
+    <PrayerTimesBar />
+
+    <!-- Additional Prayer Information & FAQ Section -->
+    <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-8">
+      <div class="rounded-2xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#121212] p-6 sm:p-8 space-y-6">
+        <h2 class="text-xl font-bold text-[#171717] dark:text-white">
+          How Prayer Times Are Calculated
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+          <div class="p-4 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#181818] space-y-2">
+            <h3 class="font-semibold text-sm text-[#171717] dark:text-white">Astronomical Solar Equations</h3>
+            <p>
+              Prayer times depend on the sun's exact altitude and declination relative to your geographical latitude and longitude. Our engine runs high-precision astronomical algorithms offline in your browser.
+            </p>
+          </div>
+          <div class="p-4 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#181818] space-y-2">
+            <h3 class="font-semibold text-sm text-[#171717] dark:text-white">Juristic & Regional Calculation Methods</h3>
+            <p>
+              Supports standard conventions including Muslim World League (MWL), ISNA (North America), Umm al-Qura (Makkah), Egyptian General Authority, and University of Islamic Sciences (Karachi).
+            </p>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-800/40 text-xs text-amber-900 dark:text-amber-200">
+          <span class="font-bold">Notice:</span> For congregational prayers, always verify with your local Masjid's official Iqamah schedule.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+  <TroubleshootingModal />
+  <SettingsModal />
+
+  <script src="../scripts/app.ts"></script>
+</Layout>

@@ -26,19 +26,27 @@
       </div>
     </a>
 
-    <!-- Center Badges: Sensor & Mode status (desktop) -->
-    <div class="hidden md:flex items-center gap-2">
-      <div id="nav-gps-badge" class="inline-flex items-center gap-1.5 rounded-full border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#121212] px-3 py-1 text-xs font-mono text-[#4d4d4d] dark:text-[#a1a1a1]">
-        <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span id="nav-gps-text">Locating GPS...</span>
-      </div>
-      <div id="nav-mode-badge" class="inline-flex items-center gap-1.5 rounded-full border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#121212] px-3 py-1 text-xs font-mono text-[#4d4d4d] dark:text-[#a1a1a1]">
-        <svg class="h-3.5 w-3.5 text-[#888888]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-        <span id="nav-mode-text">360° Compass</span>
-      </div>
-    </div>
+    <!-- Center Nav Links -->
+    <nav class="hidden md:flex items-center gap-1.5 text-xs font-medium">
+      <a
+        href="/"
+        class="px-3 py-1.5 rounded-full border border-transparent hover:border-[#ebebeb] dark:hover:border-[#262626] text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#171717] transition-all"
+      >
+        🧭 Compass
+      </a>
+      <a
+        href="/prayer"
+        class="px-3 py-1.5 rounded-full border border-transparent hover:border-[#ebebeb] dark:hover:border-[#262626] text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#171717] transition-all"
+      >
+        🕌 Prayer Times
+      </a>
+      <a
+        href="/calendar"
+        class="px-3 py-1.5 rounded-full border border-transparent hover:border-[#ebebeb] dark:hover:border-[#262626] text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#171717] transition-all"
+      >
+        🌙 Islamic Calendar
+      </a>
+    </nav>
 
     <!-- Right Actions -->
     <div class="flex items-center gap-2 sm:gap-3">

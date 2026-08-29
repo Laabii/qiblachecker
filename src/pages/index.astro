@@ -7,8 +7,6 @@ import HeroBand from '../components/HeroBand.astro';
 import QiblaCompass from '../components/QiblaCompass.astro';
 import LocationDetails from '../components/LocationDetails.astro';
 import InteractiveMap from '../components/InteractiveMap.astro';
-import PrayerTimesBar from '../components/PrayerTimesBar.astro';
-import IslamicHolidays from '../components/IslamicHolidays.astro';
 import SeoContent from '../components/SeoContent.astro';
 import Footer from '../components/Footer.astro';
 import TroubleshootingModal from '../components/TroubleshootingModal.astro';
@@ -44,11 +42,52 @@ import WelcomeModal from '../components/WelcomeModal.astro';
     <!-- Geodesic Great-Circle Interactive Map -->
     <InteractiveMap />
 
-    <!-- Real-Time Prayer Times & Countdown Bar -->
-    <PrayerTimesBar />
+    <!-- Dedicated Route Quick Cards: Prayer Times & Islamic Calendar -->
+    <section class="py-6 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <a
+        href="/prayer"
+        class="group p-5 rounded-2xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#121212] hover:border-emerald-500 dark:hover:border-emerald-500/60 shadow-xs hover:shadow-md transition-all flex items-center justify-between"
+      >
+        <div class="flex items-center gap-3.5">
+          <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xl group-hover:scale-105 transition-transform">
+            🕌
+          </div>
+          <div>
+            <h3 class="text-sm sm:text-base font-bold text-[#171717] dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+              Daily Prayer Times
+            </h3>
+            <p class="text-xs text-[#737373] dark:text-[#888888] mt-0.5">
+              Exact Salah schedule & live next prayer countdown
+            </p>
+          </div>
+        </div>
+        <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-semibold group-hover:translate-x-0.5 transition-transform">
+          View &rarr;
+        </span>
+      </a>
 
-    <!-- Upcoming Islamic Holidays & Nearby Mosques Quick Action -->
-    <IslamicHolidays />
+      <a
+        href="/calendar"
+        class="group p-5 rounded-2xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#121212] hover:border-amber-500 dark:hover:border-amber-500/60 shadow-xs hover:shadow-md transition-all flex items-center justify-between"
+      >
+        <div class="flex items-center gap-3.5">
+          <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 text-xl group-hover:scale-105 transition-transform">
+            🌙
+          </div>
+          <div>
+            <h3 class="text-sm sm:text-base font-bold text-[#171717] dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+              Islamic Calendar
+            </h3>
+            <p class="text-xs text-[#737373] dark:text-[#888888] mt-0.5">
+              Upcoming festivals, Ramadan & Hijri dates
+            </p>
+          </div>
+        </div>
+        <span class="text-xs font-mono text-amber-600 dark:text-amber-400 font-semibold group-hover:translate-x-0.5 transition-transform">
+          View &rarr;
+        </span>
+      </a>
+    </section>
 
     <!-- Comprehensive SEO Knowledge & FAQs -->
     <SeoContent />

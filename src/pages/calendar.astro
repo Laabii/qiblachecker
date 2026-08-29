@@ -1,0 +1,94 @@
+---
+// calendar.astro - Dedicated Islamic Hijri Calendar & Upcoming Festivals Page
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import LocationOverlay from '../components/LocationOverlay.astro';
+import WelcomeModal from '../components/WelcomeModal.astro';
+import IslamicHolidays from '../components/IslamicHolidays.astro';
+import Footer from '../components/Footer.astro';
+import TroubleshootingModal from '../components/TroubleshootingModal.astro';
+import SettingsModal from '../components/SettingsModal.astro';
+
+const HIJRI_MONTHS = [
+  { no: 1, name: 'Muharram', arabic: 'محرم', desc: 'Sacred month; Islamic New Year & Day of Ashura.' },
+  { no: 2, name: 'Safar', arabic: 'صفر', desc: 'Second month of the lunar Islamic calendar.' },
+  { no: 3, name: "Rabi' al-Awwal", arabic: 'ربيع الأول', desc: 'Mawlid al-Nabi (Prophet Muhammad ﷺ birth).' },
+  { no: 4, name: "Rabi' al-Thani", arabic: 'ربيع الثاني', desc: 'Fourth month of the Islamic calendar.' },
+  { no: 5, name: 'Jumada al-Awwal', arabic: 'جمادى الأولى', desc: 'Fifth month of the lunar calendar.' },
+  { no: 6, name: 'Jumada al-Thani', arabic: 'جمادى الثانية', desc: 'Sixth month of the lunar calendar.' },
+  { no: 7, name: 'Rajab', arabic: 'رجب', desc: 'Sacred month; Isra and Mi’raj.' },
+  { no: 8, name: "Sha'ban", arabic: 'شعبان', desc: 'Month preceding Ramadan; Laylat al-Bara’at.' },
+  { no: 9, name: 'Ramadan', arabic: 'رمضان', desc: 'Holy month of fasting, Laylat al-Qadr & Quran revelation.' },
+  { no: 10, name: 'Shawwal', arabic: 'شوال', desc: 'Eid al-Fitr celebration following Ramadan.' },
+  { no: 11, name: "Dhu al-Qi'dah", arabic: 'ذو القعدة', desc: 'Sacred month preceding Hajj.' },
+  { no: 12, name: 'Dhu al-Hijjah', arabic: 'ذو الحجة', desc: 'Sacred month of Hajj pilgrimage and Eid al-Adha.' }
+];
+---
+
+<Layout
+  title="Islamic Calendar 1447 AH & Holidays | Qibla Locator"
+  description="View the complete Islamic Hijri calendar, current Hijri date, and upcoming Islamic festivals (Ramadan, Eid al-Fitr, Eid al-Adha, Day of Ashura) with live countdowns."
+  canonical="https://checkqibla.vercel.app/calendar"
+>
+  <WelcomeModal />
+  <LocationOverlay />
+  <Navbar />
+
+  <main class="flex-1 flex flex-col items-center w-full py-6">
+    <!-- Hero / Header for Calendar -->
+    <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center mb-4">
+      <div class="inline-flex items-center gap-2 rounded-full border border-amber-300 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/40 px-3 py-1 text-xs font-mono text-amber-800 dark:text-amber-300 mb-3">
+        <span>🌙</span>
+        <span>Lunar Islamic Calendar</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#171717] dark:text-white mb-2">
+        Islamic Calendar & Upcoming Holidays
+      </h1>
+      <p class="text-sm sm:text-base text-[#666666] dark:text-[#a1a1a1] max-w-2xl mx-auto">
+        Track sacred Islamic dates, Umm al-Qura Hijri calendar conversions, and countdowns to major Islamic celebrations worldwide.
+      </p>
+    </section>
+
+    <!-- Upcoming Islamic Holidays Component -->
+    <IslamicHolidays />
+
+    <!-- 12 Hijri Months Overview Grid -->
+    <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-8">
+      <div class="border-b border-[#ebebeb] dark:border-[#262626] pb-3 mb-6">
+        <h2 class="text-xl font-bold text-[#171717] dark:text-white">
+          The 12 Islamic Hijri Months
+        </h2>
+        <p class="text-xs text-[#888888] dark:text-[#737373] mt-1">
+          The Islamic calendar is based on 12 lunar months in a year of 354 or 355 days.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {HIJRI_MONTHS.map((m) => (
+          <div class="p-4 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#121212] flex flex-col justify-between hover:border-[#a1a1a1] dark:hover:border-[#404040] transition-colors">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-[#f5f5f5] dark:bg-[#1c1c1c] text-[#737373]">
+                Month {m.no}
+              </span>
+              <span class="text-sm font-arabic font-semibold text-amber-600 dark:text-amber-400">
+                {m.arabic}
+              </span>
+            </div>
+            <h3 class="text-base font-semibold text-[#171717] dark:text-white mb-1">
+              {m.name}
+            </h3>
+            <p class="text-xs text-[#666666] dark:text-[#a1a1a1] leading-relaxed">
+              {m.desc}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+  <TroubleshootingModal />
+  <SettingsModal />
+
+  <script src="../scripts/app.ts"></script>
+</Layout>
