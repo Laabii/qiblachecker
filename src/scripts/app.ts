@@ -144,6 +144,9 @@ class QiblaApp {
     // Attempt GPS auto-locate
     this.requestGPSLocation(false);
 
+    // Initialize initial Welcome & Language Selection modal
+    this.initWelcomeModal();
+
     // Auto-start compass orientation sensors
     this.startCompassSensors();
 
@@ -1217,6 +1220,24 @@ class QiblaApp {
       solarSection?.scrollIntoView({ behavior: 'smooth' });
     });
 
+    // Welcome & Language Selection Modal
+    document.getElementById('btn-open-language')?.addEventListener('click', () => {
+      this.showWelcomeModal();
+    });
+
+    document.getElementById('btn-start-qibla-finder')?.addEventListener('click', () => {
+      const langSelect = document.getElementById('welcome-language-select') as HTMLSelectElement | null;
+      if (langSelect) {
+        localStorage.setItem('checkqibla_lang', langSelect.value);
+        const navLangLabel = document.getElementById('nav-lang-label');
+        if (navLangLabel) navLangLabel.textContent = langSelect.value.toUpperCase();
+      }
+      localStorage.setItem('checkqibla_welcome_seen', 'true');
+      this.hideWelcomeModal();
+      this.requestGPSLocation(true);
+      this.startCompassSensors();
+    });
+
     // Modals
     document.getElementById('btn-troubleshoot')?.addEventListener('click', () => this.showTroubleshootModal());
     document.getElementById('footer-link-calibrate')?.addEventListener('click', (e) => {
@@ -1467,6 +1488,39 @@ class QiblaApp {
 
   private hideSettingsModal(): void {
     const m = document.getElementById('settings-modal');
+    if (m) {
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+  }
+
+  private initWelcomeModal(): void {
+    const hasSeen = localStorage.getItem('checkqibla_welcome_seen');
+    const savedLang = localStorage.getItem('checkqibla_lang') || 'en';
+    const langSelect = document.getElementById('welcome-language-select') as HTMLSelectElement | null;
+    if (langSelect) langSelect.value = savedLang;
+
+    const navLangLabel = document.getElementById('nav-lang-label');
+    if (navLangLabel) navLangLabel.textContent = savedLang.toUpperCase();
+
+    const m = document.getElementById('welcome-intro-modal');
+    if (!hasSeen && m) {
+      this.showWelcomeModal();
+    } else if (m) {
+      this.hideWelcomeModal();
+    }
+  }
+
+  public showWelcomeModal(): void {
+    const m = document.getElementById('welcome-intro-modal');
+    if (m) {
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+    }
+  }
+
+  public hideWelcomeModal(): void {
+    const m = document.getElementById('welcome-intro-modal');
     if (m) {
       m.classList.add('hidden');
       m.classList.remove('flex');

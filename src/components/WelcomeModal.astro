@@ -1,0 +1,73 @@
+---
+// WelcomeModal.astro - Clean initial welcome card with language selection and 1-click start
+---
+
+<div
+  id="welcome-intro-modal"
+  class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md transition-all duration-300"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="welcome-title"
+>
+  <div class="relative w-full max-w-md rounded-2xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#121212] p-6 sm:p-8 shadow-2xl text-center transform transition-all animate-in fade-in zoom-in-95 duration-200">
+    
+    <!-- Top Icon Badge -->
+    <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#fafafa] dark:bg-[#1c1c1c] border border-[#ebebeb] dark:border-[#2a2a2a] shadow-inner">
+      <span class="text-2xl">🕋</span>
+    </div>
+
+    <!-- Title & Greeting -->
+    <h2 id="welcome-title" class="text-2xl font-bold tracking-tight text-[#171717] dark:text-white">
+      Find Your Qibla
+    </h2>
+    <p class="mt-2 text-sm text-[#666666] dark:text-[#a1a1a1] leading-relaxed">
+      Accurate GPS compass, real-time Kaaba direction finder, and precise local prayer times worldwide.
+    </p>
+
+    <!-- Language Selector Form -->
+    <div class="mt-6 text-left">
+      <label for="welcome-language-select" class="block text-xs font-mono font-medium text-[#737373] dark:text-[#888888] mb-2">
+        Language / ഭാഷ / لغة
+      </label>
+      <div class="relative">
+        <select
+          id="welcome-language-select"
+          class="w-full appearance-none rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] py-2.5 pl-3.5 pr-10 text-sm font-medium text-[#171717] dark:text-[#ededed] focus:border-emerald-500 focus:outline-hidden focus:ring-1 focus:ring-emerald-500 cursor-pointer"
+        >
+          <option value="en" selected>English (Default)</option>
+          <option value="ar">العربية (Arabic - Beta)</option>
+          <option value="ml">മലയാളം (Malayalam - Beta)</option>
+          <option value="ur">اردو (Urdu - Beta)</option>
+          <option value="id">Bahasa Indonesia (Beta)</option>
+          <option value="tr">Türkçe (Beta)</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-[#888888]">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Permission Note -->
+    <div class="mt-4 flex items-center gap-2 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 p-2.5 text-left text-xs text-emerald-800 dark:text-emerald-300">
+      <span class="text-sm">📍</span>
+      <span>Tap below to allow location & compass for instant alignment.</span>
+    </div>
+
+    <!-- Primary Action Button -->
+    <div class="mt-6">
+      <button
+        id="btn-start-qibla-finder"
+        type="button"
+        class="w-full flex items-center justify-center gap-2 rounded-xl bg-[#171717] dark:bg-white px-5 py-3.5 text-sm font-semibold text-white dark:text-[#171717] shadow-lg hover:bg-black dark:hover:bg-[#f0f0f0] transition-all transform active:scale-[0.98] cursor-pointer"
+      >
+        <span>Find Qibla Direction</span>
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </button>
+    </div>
+
+  </div>
+</div>

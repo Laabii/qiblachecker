@@ -14,9 +14,13 @@ import Footer from '../components/Footer.astro';
 import TroubleshootingModal from '../components/TroubleshootingModal.astro';
 import SettingsModal from '../components/SettingsModal.astro';
 import LocationOverlay from '../components/LocationOverlay.astro';
+import WelcomeModal from '../components/WelcomeModal.astro';
 ---
 
 <Layout>
+  <!-- Initial Language Selection & 1-Click Welcome Modal -->
+  <WelcomeModal />
+
   <!-- Interactive Location Finding Loading Overlay & Diagnostic Modal -->
   <LocationOverlay />
 
