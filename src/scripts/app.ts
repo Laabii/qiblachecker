@@ -23,6 +23,7 @@ import {
 
 import { POPULAR_CITIES, searchCities, type CityLocation } from '../utils/cities';
 import { audioFeedback } from '../utils/audio';
+import { TRANSLATIONS, type SupportedLanguage } from '../utils/i18n';
 
 // Dynamic import for Leaflet
 import type * as LeafletType from 'leaflet';
@@ -82,10 +83,14 @@ class QiblaApp {
   // Saved & Recent Locations
   private savedLocations: Array<{ name: string; lat: number; lng: number; timestamp: number }> = [];
 
+  // Internationalization
+  private currentLanguage: SupportedLanguage = 'en';
+
   constructor() {
     this.restoreSavedLocation();
     this.loadSavedLocations();
     this.loadSettings();
+    this.initLanguage();
     this.initTheme();
   }
 
@@ -911,6 +916,7 @@ class QiblaApp {
   }
 
   private updateAlignmentState(isFacing: boolean, relativeAngle: number): void {
+    const t = TRANSLATIONS[this.currentLanguage] || TRANSLATIONS.en;
     const liveTitle = document.getElementById('live-guidance-title');
     const turnInstruction = document.getElementById('turn-instruction');
     const halo = document.getElementById('qibla-aligned-halo');
@@ -926,10 +932,10 @@ class QiblaApp {
       }
 
       if (liveTitle) {
-        liveTitle.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 flex items-center justify-center gap-1.5 animate-pulse"><span>✓</span> Facing Holy Kaaba</span>`;
+        liveTitle.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 flex items-center justify-center gap-1.5 animate-pulse"><span>✓</span> ${t.facingKaaba}</span>`;
       }
       if (turnInstruction) {
-        turnInstruction.textContent = `You are aligned with Makkah. Ready for Salah.`;
+        turnInstruction.textContent = t.readyForSalah;
         turnInstruction.className = 'text-sm sm:text-base font-semibold text-emerald-600 dark:text-emerald-400 mt-1 transition-all';
       }
       if (halo) halo.style.opacity = '1';
@@ -939,21 +945,21 @@ class QiblaApp {
     } else {
       this.isAligned = false;
 
-      const turnDir = relativeAngle > 0 ? 'Right ↻' : 'Left ↺';
       const degAbs = Math.round(Math.abs(relativeAngle));
+      const turnMsg = relativeAngle > 0 ? t.turnRight(degAbs) : t.turnLeft(degAbs);
 
       if (liveTitle) {
         if (this.hasSensorFired) {
-          liveTitle.innerHTML = `Turn <span class="text-blue-600 dark:text-blue-400 font-bold">${degAbs}° ${turnDir}</span>`;
+          liveTitle.innerHTML = `<span class="text-blue-600 dark:text-blue-400 font-bold">${turnMsg}</span>`;
         } else {
-          liveTitle.textContent = `Rotate Phone Towards Kaaba`;
+          liveTitle.textContent = t.rotateTowardsKaaba;
         }
       }
 
       if (turnInstruction) {
         turnInstruction.textContent = this.hasSensorFired
-          ? `Rotate your body until the needle turns green`
-          : `Hold phone flat to activate live compass guidance`;
+          ? t.rotateBodyPrompt
+          : t.holdPhoneFlat;
         turnInstruction.className = 'text-sm sm:text-base font-medium text-[#737373] dark:text-[#a1a1a1] mt-1 transition-all';
       }
       if (halo) halo.style.opacity = '0';
@@ -1216,13 +1222,16 @@ class QiblaApp {
       this.showWelcomeModal();
     });
 
+    document.getElementById('welcome-language-select')?.addEventListener('change', (e) => {
+      const selected = (e.target as HTMLSelectElement).value as SupportedLanguage;
+      this.setLanguage(selected, true);
+    });
+
     document.getElementById('btn-start-qibla-finder')?.addEventListener('click', () => {
       audioFeedback.unlockAudio();
       const langSelect = document.getElementById('welcome-language-select') as HTMLSelectElement | null;
       if (langSelect) {
-        localStorage.setItem('checkqibla_lang', langSelect.value);
-        const navLangLabel = document.getElementById('nav-lang-label');
-        if (navLangLabel) navLangLabel.textContent = langSelect.value.toUpperCase();
+        this.setLanguage(langSelect.value as SupportedLanguage, true);
       }
       localStorage.setItem('checkqibla_welcome_seen', 'true');
       this.hideWelcomeModal();
@@ -1493,13 +1502,84 @@ class QiblaApp {
     if (langSelect) langSelect.value = savedLang;
 
     const navLangLabel = document.getElementById('nav-lang-label');
-    if (navLangLabel) navLangLabel.textContent = savedLang.toUpperCase();
+    if (navLangLabel) {
+      navLangLabel.textContent = savedLang === 'ar' ? 'عربي' : savedLang === 'ml' ? 'മല' : 'EN';
+    }
 
     const m = document.getElementById('welcome-intro-modal');
     if (!hasSeen && m) {
       this.showWelcomeModal();
     } else if (m) {
       this.hideWelcomeModal();
+    }
+  }
+
+  private initLanguage(): void {
+    const saved = (localStorage.getItem('checkqibla_lang') as SupportedLanguage) || 'en';
+    this.setLanguage(saved, false);
+  }
+
+  public setLanguage(lang: SupportedLanguage, save: boolean = true): void {
+    this.currentLanguage = lang;
+    if (save) {
+      localStorage.setItem('checkqibla_lang', lang);
+    }
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+    const navLangLabel = document.getElementById('nav-lang-label');
+    if (navLangLabel) {
+      navLangLabel.textContent = lang === 'ar' ? 'عربي' : lang === 'ml' ? 'മല' : 'EN';
+    }
+
+    const welcomeSelect = document.getElementById('welcome-language-select') as HTMLSelectElement | null;
+    if (welcomeSelect) welcomeSelect.value = lang;
+
+    this.applyTranslationsToDOM();
+    this.updateCalculations();
+    this.renderSavedLocationsUI();
+  }
+
+  private applyTranslationsToDOM(): void {
+    const t = TRANSLATIONS[this.currentLanguage] || TRANSLATIONS.en;
+
+    // Search bar placeholder
+    const searchInput = document.getElementById('city-search-input') as HTMLInputElement | null;
+    if (searchInput) searchInput.placeholder = t.searchPlaceholder;
+
+    // Mode tabs
+    const tabCompass = document.getElementById('mode-tab-compass');
+    if (tabCompass) tabCompass.textContent = t.compassDial;
+    const tabArrow = document.getElementById('mode-tab-arrow');
+    if (tabArrow) tabArrow.textContent = t.pointerArrow;
+
+    // Hero buttons
+    const btnCompassText = document.getElementById('btn-enable-compass-text');
+    if (btnCompassText) btnCompassText.textContent = this.isCompassActive ? t.compassActive : t.startCompass;
+
+    const btnHeroMosques = document.getElementById('btn-hero-nearby-mosques');
+    if (btnHeroMosques) {
+      btnHeroMosques.innerHTML = `<span>🕌</span><span>${t.nearbyMosques}</span>`;
+    }
+
+    const btnSearchCity = document.getElementById('btn-search-city-trigger');
+    if (btnSearchCity) {
+      btnSearchCity.innerHTML = `<svg class="h-4 w-4 text-[#888888]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg><span>${this.currentLanguage === 'ar' ? 'بحث' : this.currentLanguage === 'ml' ? 'തിരയുക' : 'Search City'}</span>`;
+    }
+
+    const btnUseGps = document.getElementById('btn-use-gps');
+    if (btnUseGps) {
+      btnUseGps.innerHTML = `<svg class="w-3.5 h-3.5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>${t.useCurrentGps}</span>`;
+    }
+
+    const btnSaveLoc = document.getElementById('btn-save-current-location');
+    if (btnSaveLoc) {
+      btnSaveLoc.innerHTML = `<span>⭐</span><span>${t.saveThisPlace}</span>`;
+    }
+
+    const btnMosques = document.getElementById('btn-open-nearby-mosques');
+    if (btnMosques) {
+      btnMosques.innerHTML = `<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span>${t.findMosquesBtn}</span><svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>`;
     }
   }
 
