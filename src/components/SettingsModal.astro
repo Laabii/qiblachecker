@@ -1,0 +1,109 @@
+---
+// SettingsModal.astro - Modal dialog for app preferences with dark mode
+---
+
+<div id="settings-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-xs transition-opacity duration-300">
+  <div class="w-full max-w-lg rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#121212] p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0px_10px_30px_-5px_rgba(0,0,0,0.12),0px_24px_48px_-12px_rgba(0,0,0,0.16)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.08),0px_10px_30px_rgba(0,0,0,0.8)] transform transition-all">
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between border-b border-[#ebebeb] dark:border-[#262626] pb-4 mb-4">
+      <div>
+        <h3 class="text-lg font-semibold tracking-tight text-[#171717] dark:text-white">Preferences & Settings</h3>
+        <p class="text-xs text-[#888888] dark:text-[#737373]">Customize sensor behavior, audio feedback, and calculation methods.</p>
+      </div>
+      <button
+        id="btn-close-settings-modal"
+        type="button"
+        class="rounded-md p-1.5 text-[#888888] hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] hover:text-[#171717] dark:hover:text-white transition-colors"
+      >
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="space-y-4 text-xs sm:text-sm">
+      <!-- 1. Theme Selection -->
+      <div class="flex items-center justify-between">
+        <div>
+          <span class="font-medium text-[#171717] dark:text-white block">Theme Appearance</span>
+          <span class="text-xs text-[#888888] dark:text-[#737373] block">Automatic switch based on system or manual selection</span>
+        </div>
+        <select id="setting-theme-select" class="rounded-md border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#1a1a1a] px-3 py-1.5 text-xs text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-[#171717] dark:focus:ring-white">
+          <option value="system">Auto (System Default)</option>
+          <option value="light">Light Mode</option>
+          <option value="dark">Dark Mode</option>
+        </select>
+      </div>
+
+      <!-- 2. Audio Chime Feedback -->
+      <div class="flex items-center justify-between border-t border-[#ebebeb] dark:border-[#262626] pt-3">
+        <div>
+          <span class="font-medium text-[#171717] dark:text-white block">Harmonic Audio Chime</span>
+          <span class="text-xs text-[#888888] dark:text-[#737373] block">Plays a serene acoustic chime when facing within ±3° of Kaaba</span>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" id="setting-audio-toggle" class="sr-only peer" checked />
+          <div class="w-11 h-6 bg-[#e5e5e5] dark:bg-[#262626] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-[#a1a1a1] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#171717] dark:peer-checked:bg-white dark:peer-checked:after:border-[#171717] dark:peer-checked:after:bg-[#171717]"></div>
+        </label>
+      </div>
+
+      <!-- 3. Haptic Vibration Feedback -->
+      <div class="flex items-center justify-between border-t border-[#ebebeb] dark:border-[#262626] pt-3">
+        <div>
+          <span class="font-medium text-[#171717] dark:text-white block">Haptic Vibration</span>
+          <span class="text-xs text-[#888888] dark:text-[#737373] block">Pulses phone vibration motor upon Qibla alignment</span>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" id="setting-vibration-toggle" class="sr-only peer" checked />
+          <div class="w-11 h-6 bg-[#e5e5e5] dark:bg-[#262626] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-[#a1a1a1] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#171717] dark:peer-checked:bg-white dark:peer-checked:after:border-[#171717] dark:peer-checked:after:bg-[#171717]"></div>
+        </label>
+      </div>
+
+      <!-- 4. Distance Units (KM vs MI) -->
+      <div class="flex items-center justify-between border-t border-[#ebebeb] dark:border-[#262626] pt-3">
+        <div>
+          <span class="font-medium text-[#171717] dark:text-white block">Distance Unit</span>
+          <span class="text-xs text-[#888888] dark:text-[#737373] block">Measurement for Kaaba distance</span>
+        </div>
+        <select id="setting-unit-select" class="rounded-md border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#1a1a1a] px-3 py-1.5 text-xs text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-[#171717] dark:focus:ring-white">
+          <option value="km">Kilometers (km)</option>
+          <option value="mi">Miles (mi)</option>
+        </select>
+      </div>
+
+      <!-- 5. Prayer Calculation Method -->
+      <div class="border-t border-[#ebebeb] dark:border-[#262626] pt-3">
+        <label for="setting-prayer-method" class="font-medium text-[#171717] dark:text-white block mb-1">Prayer Calculation Method</label>
+        <select id="setting-prayer-method" class="w-full rounded-md border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#1a1a1a] px-3 py-2 text-xs text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-[#171717] dark:focus:ring-white">
+          <option value="MWL">Muslim World League (Fajr 18°, Isha 17°)</option>
+          <option value="ISNA">Islamic Society of North America - ISNA (Fajr 15°, Isha 15°)</option>
+          <option value="Egypt">Egyptian General Authority of Survey (Fajr 19.5°, Isha 17.5°)</option>
+          <option value="Makkah">Umm al-Qura University, Makkah (Fajr 18.5°, Isha 90 min)</option>
+          <option value="Karachi">University of Islamic Sciences, Karachi (Fajr 18°, Isha 18°)</option>
+          <option value="Tehran">Institute of Geophysics, University of Tehran</option>
+        </select>
+      </div>
+
+      <!-- 6. Asr Juristic Method -->
+      <div class="border-t border-[#ebebeb] dark:border-[#262626] pt-3">
+        <label for="setting-asr-school" class="font-medium text-[#171717] dark:text-white block mb-1">Asr Juristic Method (Shadow Factor)</label>
+        <select id="setting-asr-school" class="w-full rounded-md border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#1a1a1a] px-3 py-2 text-xs text-[#171717] dark:text-[#ededed] focus:outline-none focus:ring-1 focus:ring-[#171717] dark:focus:ring-white">
+          <option value="Standard">Standard (Shafi'i, Maliki, Hanbali, Ja'fari - 1x Shadow)</option>
+          <option value="Hanafi">Hanafi (2x Shadow)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="mt-6 flex justify-end gap-2 border-t border-[#ebebeb] dark:border-[#262626] pt-4">
+      <button
+        id="btn-save-settings"
+        type="button"
+        class="rounded-full bg-[#171717] dark:bg-white px-4 py-2 text-xs font-semibold text-white dark:text-[#171717] hover:bg-[#2d2d2d] dark:hover:bg-[#e0e0e0] transition-colors cursor-pointer"
+      >
+        Save & Apply
+      </button>
+    </div>
+  </div>
+</div>

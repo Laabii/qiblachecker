@@ -1,0 +1,71 @@
+---
+// InteractiveMap.astro - Geodesic Leaflet map with dark mode support
+---
+
+<section id="section-map" class="scroll-mt-20 py-6 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
+  <div class="rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#121212] p-5 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0px_2px_4px_rgba(0,0,0,0.04)]">
+    <!-- Map Header & Controls -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="flex h-2 w-2 rounded-full bg-rose-500"></span>
+          <h2 class="text-base sm:text-lg font-semibold tracking-tight text-[#171717] dark:text-white">Interactive Qibla Great-Circle Map</h2>
+        </div>
+        <p class="text-xs text-[#4d4d4d] dark:text-[#a1a1a1] mt-0.5">
+          Shows the shortest spherical geodesic path directly to the Holy Kaaba in Makkah. Click anywhere on the map to set a custom location.
+        </p>
+      </div>
+
+      <!-- Quick Map View Actions -->
+      <div class="flex items-center gap-1.5 self-start sm:self-auto">
+        <button
+          id="btn-map-fit"
+          type="button"
+          class="rounded-md border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] px-2.5 py-1 text-xs font-mono font-medium text-[#4d4d4d] dark:text-[#a1a1a1] hover:bg-[#f0f0f0] dark:hover:bg-[#222222] transition-colors"
+          title="Fit route in view"
+        >
+          Fit Route
+        </button>
+        <button
+          id="btn-map-center-user"
+          type="button"
+          class="rounded-md border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] px-2.5 py-1 text-xs font-mono font-medium text-[#4d4d4d] dark:text-[#a1a1a1] hover:bg-[#f0f0f0] dark:hover:bg-[#222222] transition-colors"
+          title="Center on user position"
+        >
+          My Location
+        </button>
+        <button
+          id="btn-map-center-kaaba"
+          type="button"
+          class="rounded-md border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] px-2.5 py-1 text-xs font-mono font-medium text-[#4d4d4d] dark:text-[#a1a1a1] hover:bg-[#f0f0f0] dark:hover:bg-[#222222] transition-colors"
+          title="Center on Kaaba"
+        >
+          Kaaba
+        </button>
+      </div>
+    </div>
+
+    <!-- Map Canvas Container -->
+    <div class="relative w-full h-[320px] sm:h-[400px] md:h-[440px] rounded-lg overflow-hidden border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717]">
+      <div id="qibla-leaflet-map" class="w-full h-full z-10"></div>
+      
+      <!-- Overlay Legend -->
+      <div class="absolute bottom-3 left-3 z-20 pointer-events-none flex flex-wrap items-center gap-2 bg-white/95 dark:bg-[#121212]/95 backdrop-blur-md px-3 py-1.5 rounded-md border border-[#ebebeb] dark:border-[#262626] text-[11px] font-mono shadow-xs">
+        <div class="flex items-center gap-1">
+          <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+          <span class="text-[#171717] dark:text-[#ededed]">You</span>
+        </div>
+        <span class="text-[#ebebeb] dark:text-[#333333]">|</span>
+        <div class="flex items-center gap-1">
+          <span class="w-2.5 h-2.5 rounded-sm bg-[#171717] dark:bg-white border border-[#fbbf24]"></span>
+          <span class="text-[#171717] dark:text-[#ededed]">Kaaba</span>
+        </div>
+        <span class="text-[#ebebeb] dark:text-[#333333]">|</span>
+        <div class="flex items-center gap-1">
+          <span class="w-4 h-0.5 bg-rose-500"></span>
+          <span class="text-[#4d4d4d] dark:text-[#a1a1a1]">Geodesic Path</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,242 @@
+---
+// QiblaCompass.astro - Master interactive compass with gyro spring dampening & dark mode
+---
+
+<section id="section-compass" class="scroll-mt-20 py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
+  <!-- Mode Tab Pills (DESIGN.md tab-ghost) -->
+  <div class="flex items-center justify-center gap-1.5 mb-6 p-1 rounded-full bg-[#f5f5f5] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] max-w-sm mx-auto shadow-inner transition-colors duration-200">
+    <button
+      id="mode-tab-compass"
+      type="button"
+      class="flex-1 py-1.5 px-3 rounded-full text-xs font-medium text-[#171717] dark:text-white bg-white dark:bg-[#262626] shadow-xs transition-all cursor-pointer"
+    >
+      360° Compass
+    </button>
+    <button
+      id="mode-tab-arrow"
+      type="button"
+      class="flex-1 py-1.5 px-3 rounded-full text-xs font-medium text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white transition-all cursor-pointer"
+    >
+      Pointer Arrow
+    </button>
+    <button
+      id="mode-tab-solar"
+      type="button"
+      class="flex-1 py-1.5 px-3 rounded-full text-xs font-medium text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white transition-all cursor-pointer"
+    >
+      Sun Alignment
+    </button>
+  </div>
+
+  <!-- Main Compass Display Area -->
+  <div class="relative flex flex-col items-center">
+    <!-- Live Direction Status Banner -->
+    <div id="qibla-status-box" class="mb-4 text-center transition-all duration-300">
+      <div id="status-badge" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#121212] border border-[#ebebeb] dark:border-[#262626] shadow-xs text-xs font-mono text-[#4d4d4d] dark:text-[#a1a1a1]">
+        <span id="status-indicator-dot" class="h-2 w-2 rounded-full bg-blue-500"></span>
+        <span id="status-text">Hold device flat & tap "Start Compass"</span>
+      </div>
+      <div class="mt-2 flex items-baseline justify-center gap-2">
+        <span id="qibla-bearing-display" class="text-4xl sm:text-5xl font-semibold tracking-[-0.04em] text-[#171717] dark:text-white">--°</span>
+        <span id="qibla-cardinal-display" class="text-sm font-mono text-[#888888] dark:text-[#737373]">--</span>
+      </div>
+      <p id="turn-instruction" class="text-xs font-medium text-[#4d4d4d] dark:text-[#a1a1a1] mt-1">
+        Relative turn instruction will appear here
+      </p>
+    </div>
+
+    <!-- The Circular Compass Vessel -->
+    <div class="relative flex items-center justify-center w-[280px] h-[280px] sm:w-[340px] sm:h-[340px] md:w-[380px] md:h-[380px] my-2">
+      <!-- Outer Glass Bezel Ring with Stacked Shadow -->
+      <div id="compass-outer-bezel" class="absolute inset-0 rounded-full border border-[#ebebeb] dark:border-[#262626] bg-gradient-to-b from-white to-[#fafafa] dark:from-[#171717] dark:to-[#0f0f0f] shadow-[0_0_0_1px_rgba(0,0,0,0.06),0px_4px_6px_-1px_rgba(0,0,0,0.05),0px_12px_24px_-4px_rgba(0,0,0,0.08)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.08),0px_4px_12px_rgba(0,0,0,0.6)] transition-all duration-500">
+      </div>
+
+      <!-- Alignment Halo Glow -->
+      <div id="qibla-aligned-halo" class="absolute -inset-2 rounded-full border-2 border-emerald-500/50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+      <!-- Dial Container 1: Mode = Compass -->
+      <div id="compass-dial-mode" class="relative w-full h-full p-3 transition-opacity duration-300">
+        <svg id="svg-compass-dial" viewBox="0 0 400 400" class="w-full h-full select-none" style="transform-origin: center center; will-change: transform;">
+          <defs>
+            <!-- Dial Surface Light Gradient -->
+            <radialGradient id="dial-grad-light" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="85%" stop-color="#fafafa" />
+              <stop offset="100%" stop-color="#f0f0f0" />
+            </radialGradient>
+
+            <!-- Dial Surface Dark Gradient -->
+            <radialGradient id="dial-grad-dark" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#1c1c1c" />
+              <stop offset="85%" stop-color="#141414" />
+              <stop offset="100%" stop-color="#0d0d0d" />
+            </radialGradient>
+
+            <!-- Gold Gradient for Kaaba Pointer -->
+            <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fbbf24" />
+              <stop offset="100%" stop-color="#d97706" />
+            </linearGradient>
+
+            <filter id="needle-shadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.25" />
+            </filter>
+          </defs>
+
+          <!-- Dial Base Circle with CSS variable fill -->
+          <circle id="svg-dial-base" cx="200" cy="200" r="185" fill="url(#dial-grad-light)" class="dark:fill-[url(#dial-grad-dark)] transition-colors" stroke="#ebebeb" stroke-width="1.5" />
+          <circle cx="200" cy="200" r="150" fill="none" stroke="#e0e0e0" class="dark:stroke-[#2a2a2a]" stroke-width="1" stroke-dasharray="2,4" />
+
+          <!-- Degree Ticks & Markings -->
+          <g id="dial-ticks" stroke="#a1a1a1" class="dark:stroke-[#555555]" stroke-width="1">
+            <line x1="200" y1="18" x2="200" y2="34" stroke="#e11d48" stroke-width="2.5" /> <!-- North (Red) -->
+            <line x1="382" y1="200" x2="366" y2="200" stroke="#171717" class="dark:stroke-[#ededed]" stroke-width="2" />
+            <line x1="200" y1="382" x2="200" y2="366" stroke="#171717" class="dark:stroke-[#ededed]" stroke-width="2" />
+            <line x1="18" y1="200" x2="34" y2="200" stroke="#171717" class="dark:stroke-[#ededed]" stroke-width="2" />
+
+            <line x1="291" y1="42.5" x2="283" y2="56.3" />
+            <line x1="357.5" y1="109" x2="343.7" y2="117" />
+            <line x1="357.5" y1="291" x2="343.7" y2="283" />
+            <line x1="291" y1="357.5" x2="283" y2="343.7" />
+            <line x1="109" y1="357.5" x2="117" y2="343.7" />
+            <line x1="42.5" y1="291" x2="56.3" y2="283" />
+            <line x1="42.5" y1="109" x2="56.3" y2="117" />
+            <line x1="109" y1="42.5" x2="117" y2="56.3" />
+          </g>
+
+          <!-- Cardinal Labels -->
+          <text x="200" y="52" text-anchor="middle" font-family="var(--font-sans)" font-size="16" font-weight="700" fill="#e11d48">N</text>
+          <text x="350" y="206" text-anchor="middle" font-family="var(--font-sans)" font-size="14" font-weight="600" fill="#171717" class="dark:fill-[#ededed]">E</text>
+          <text x="200" y="358" text-anchor="middle" font-family="var(--font-sans)" font-size="14" font-weight="600" fill="#171717" class="dark:fill-[#ededed]">S</text>
+          <text x="50" y="206" text-anchor="middle" font-family="var(--font-sans)" font-size="14" font-weight="600" fill="#171717" class="dark:fill-[#ededed]">W</text>
+
+          <!-- Numeric Degree Labels -->
+          <text x="282" y="74" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="#888888" class="dark:fill-[#666666]">30°</text>
+          <text x="338" y="132" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="#888888" class="dark:fill-[#666666]">60°</text>
+          <text x="338" y="278" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="#888888" class="dark:fill-[#666666]">120°</text>
+          <text x="282" y="336" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="#888888" class="dark:fill-[#666666]">150°</text>
+          <text x="118" y="336" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="#888888" class="dark:fill-[#666666]">210°</text>
+          <text x="62" y="278" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="#888888" class="dark:fill-[#666666]">240°</text>
+          <text x="62" y="132" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="#888888" class="dark:fill-[#666666]">300°</text>
+          <text x="118" y="74" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="#888888" class="dark:fill-[#666666]">330°</text>
+
+          <!-- KAABA DIRECTION PIN / BEACON -->
+          <g id="kaaba-marker-group" style="transform-origin: 200px 200px; transform: rotate(0deg); transition: transform 0.4s ease-out;">
+            <line x1="200" y1="200" x2="200" y2="40" stroke="url(#gold-grad)" stroke-width="2.5" stroke-dasharray="4,4" opacity="0.8" />
+            <g transform="translate(186, 22) scale(0.65)">
+              <rect x="0" y="4" width="42" height="42" rx="5" fill="#171717" stroke="#fbbf24" stroke-width="3" filter="url(#needle-shadow)" />
+              <rect x="0" y="12" width="42" height="7" fill="#fbbf24" />
+              <circle cx="21" cy="4" r="5" fill="#fbbf24" />
+            </g>
+          </g>
+        </svg>
+
+        <!-- Static Phone Pointer / Center Bezel -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div class="absolute top-1 left-1/2 -translate-x-1/2 flex flex-col items-center">
+            <div id="target-bezel-triangle" class="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[14px] border-t-[#171717] dark:border-t-white drop-shadow-xs transition-colors duration-300"></div>
+          </div>
+
+          <div id="compass-center-pivot" class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] shadow-sm flex flex-col items-center justify-center text-center transition-all duration-300">
+            <svg id="center-kaaba-icon" class="w-6 h-6 text-[#171717] dark:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="4" y="5" width="16" height="15" rx="2" />
+              <rect x="4" y="8" width="16" height="2" fill="#fbbf24" />
+            </svg>
+            <span id="center-heading-text" class="text-[9px] font-mono font-semibold text-[#4d4d4d] dark:text-[#a1a1a1] -mt-0.5">0°</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dial Container 2: Mode = Pointer Arrow -->
+      <div id="compass-arrow-mode" class="hidden absolute inset-0 flex flex-col items-center justify-center p-4 transition-opacity duration-300">
+        <svg id="svg-arrow-pointer" viewBox="0 0 240 240" class="w-full h-full select-none" style="transform-origin: 120px 120px; transform: rotate(0deg); will-change: transform;">
+          <defs>
+            <linearGradient id="pointer-arrow-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#2563eb" />
+              <stop offset="100%" stop-color="#1d4ed8" />
+            </linearGradient>
+            <filter id="arrow-drop-shadow" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.3" />
+            </filter>
+          </defs>
+
+          <!-- Outer Guide Ring -->
+          <circle cx="120" cy="120" r="105" fill="none" stroke="#ebebeb" class="dark:stroke-[#262626]" stroke-width="2" stroke-dasharray="4,4" />
+          <circle cx="120" cy="120" r="85" fill="none" stroke="#e5e5e5" class="dark:stroke-[#1f1f1f]" stroke-width="1" />
+
+          <!-- Dynamic Arrow Needle -->
+          <g id="arrow-needle-group">
+            <!-- Arrow Head pointing up -->
+            <path id="arrow-pointer-path" d="M 120,20 L 155,180 L 120,150 L 85,180 Z" fill="url(#pointer-arrow-grad)" filter="url(#arrow-drop-shadow)" />
+            <!-- Kaaba Icon at Arrow Tip -->
+            <g transform="translate(110, 24) scale(0.5)">
+              <rect x="0" y="4" width="40" height="40" rx="4" fill="#171717" stroke="#fbbf24" stroke-width="3" />
+              <rect x="0" y="12" width="40" height="6" fill="#fbbf24" />
+            </g>
+            <!-- Center Hub -->
+            <circle cx="120" cy="150" r="10" fill="#ffffff" class="dark:fill-[#171717]" stroke="#171717" class="dark:stroke-white" stroke-width="3" />
+          </g>
+        </svg>
+      </div>
+
+      <!-- Dial Container 3: Mode = Sun & Shadow Alignment -->
+      <div id="compass-solar-mode" class="hidden absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
+        <div class="relative w-full h-full flex items-center justify-center">
+          <svg id="svg-solar-dial" viewBox="0 0 200 200" class="w-full h-full">
+            <circle cx="100" cy="100" r="90" fill="none" stroke="#ebebeb" class="dark:stroke-[#262626]" stroke-width="1.5" stroke-dasharray="3,3" />
+            
+            <g id="solar-sun-ray" style="transform-origin: 100px 100px; transform: rotate(180deg);">
+              <line x1="100" y1="100" x2="100" y2="20" stroke="#f59e0b" stroke-width="2.5" />
+              <circle cx="100" cy="18" r="9" fill="#fef3c7" class="dark:fill-[#2e1065]" stroke="#f59e0b" stroke-width="2" />
+              <text x="100" y="22" text-anchor="middle" font-size="10" fill="#d97706">☀️</text>
+            </g>
+
+            <g id="solar-qibla-ray" style="transform-origin: 100px 100px; transform: rotate(0deg);">
+              <line x1="100" y1="100" x2="100" y2="25" stroke="#10b981" stroke-width="3" stroke-dasharray="3,3" />
+              <polygon points="100,10 94,26 106,26" fill="#10b981" />
+            </g>
+
+            <circle cx="100" cy="100" r="7" fill="#171717" class="dark:fill-white" stroke="#ffffff" class="dark:stroke-[#171717]" stroke-width="2" />
+          </svg>
+          <div class="absolute bottom-2 inset-x-0 text-center">
+            <span id="solar-sun-altitude-text" class="text-[11px] font-mono text-[#888888] dark:text-[#737373]">Sun Alt: Calculating...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Calibration & Control Buttons under Compass -->
+    <div class="mt-4 flex flex-wrap items-center justify-center gap-2">
+      <button
+        id="btn-recalibrate-quick"
+        type="button"
+        class="inline-flex items-center gap-1.5 rounded-full border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#171717] px-3 py-1.5 text-xs font-medium text-[#4d4d4d] dark:text-[#ededed] shadow-xs hover:bg-[#fafafa] dark:hover:bg-[#222222] transition-colors"
+      >
+        <svg class="h-3.5 w-3.5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        <span>Recalibrate (Figure-8)</span>
+      </button>
+
+      <button
+        id="btn-toggle-audio-quick"
+        type="button"
+        class="inline-flex items-center gap-1.5 rounded-full border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#171717] px-3 py-1.5 text-xs font-medium text-[#4d4d4d] dark:text-[#ededed] shadow-xs hover:bg-[#fafafa] dark:hover:bg-[#222222] transition-colors"
+        title="Toggle Audio Chime when Qibla Aligned"
+      >
+        <span id="quick-audio-icon">🔔</span>
+        <span id="quick-audio-text">Audio: On</span>
+      </button>
+
+      <button
+        id="btn-toggle-haptic-quick"
+        type="button"
+        class="inline-flex items-center gap-1.5 rounded-full border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#171717] px-3 py-1.5 text-xs font-medium text-[#4d4d4d] dark:text-[#ededed] shadow-xs hover:bg-[#fafafa] dark:hover:bg-[#222222] transition-colors"
+        title="Toggle Vibration Feedback"
+      >
+        <span>📳</span>
+        <span id="quick-haptic-text">Vibration: On</span>
+      </button>
+    </div>
+  </div>
+</section>

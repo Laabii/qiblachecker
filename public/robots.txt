@@ -1,0 +1,11 @@
+# robots.txt for CheckQibla.com
+User-agent: *
+Allow: /
+
+# Disallow internal error routes
+Disallow: /500
+Disallow: /404
+
+# Sitemaps
+Sitemap: https://checkqibla.com/sitemap-index.xml
+Sitemap: https://checkqibla.com/sitemap.xml

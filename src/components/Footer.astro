@@ -1,0 +1,74 @@
+---
+// Footer.astro - Vercel-inspired 4-column clean footer with dark mode support
+---
+
+<footer class="border-t border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#0a0a0a] pt-12 pb-16 transition-colors duration-200">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+      <!-- Column 1: Brand & Overview -->
+      <div class="col-span-2 md:col-span-1 space-y-3">
+        <div class="flex items-center gap-2">
+          <div class="flex h-7 w-7 items-center justify-center rounded-md shadow-sm overflow-hidden">
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" class="h-full w-full">
+              <rect width="512" height="512" fill="#000000" rx="128" ry="128"/>
+              <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-family="Bookman, Georgia, serif" font-weight="bold" fill="#804000" font-size="181.8427644063752">Qibla </text>
+            </svg>
+          </div>
+          <span class="text-sm font-semibold tracking-tight text-[#171717] dark:text-white">CheckQibla.com</span>
+        </div>
+        <p class="text-xs text-[#888888] dark:text-[#737373] leading-relaxed">
+          The fastest, most accurate web-based Qibla compass and prayer companion for Muslims worldwide.
+        </p>
+        <div class="pt-1">
+          <span class="inline-flex items-center gap-1.5 rounded-full border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] px-2.5 py-1 text-[11px] font-mono text-[#4d4d4d] dark:text-[#a1a1a1]">
+            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+            Offline PWA Ready
+          </span>
+        </div>
+      </div>
+
+      <!-- Column 2: Tools & Modes -->
+      <div>
+        <span class="text-xs font-mono uppercase tracking-wider text-[#888888] dark:text-[#737373] block mb-3">Navigation</span>
+        <ul class="space-y-2 text-xs text-[#4d4d4d] dark:text-[#a1a1a1]">
+          <li><a href="#section-compass" class="hover:text-[#171717] dark:hover:text-white transition-colors">360° Compass Dial</a></li>
+          <li><a href="#section-solar" class="hover:text-[#171717] dark:hover:text-white transition-colors">Sun & Shadow Method</a></li>
+          <li><a href="#section-map" class="hover:text-[#171717] dark:hover:text-white transition-colors">Geodesic Arc Map</a></li>
+          <li><a href="#section-prayer" class="hover:text-[#171717] dark:hover:text-white transition-colors">Daily Prayer Times</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Top Cities -->
+      <div>
+        <span class="text-xs font-mono uppercase tracking-wider text-[#888888] dark:text-[#737373] block mb-3">Popular Locations</span>
+        <ul class="space-y-2 text-xs text-[#4d4d4d] dark:text-[#a1a1a1]">
+          <li><button type="button" class="quick-city-pill hover:text-[#171717] dark:hover:text-white transition-colors text-left cursor-pointer" data-lat="9.9312" data-lng="76.2673" data-name="Kochi, Kerala, India">Qibla Direction Kochi (Kerala)</button></li>
+          <li><button type="button" class="quick-city-pill hover:text-[#171717] dark:hover:text-white transition-colors text-left cursor-pointer" data-lat="11.2588" data-lng="75.7804" data-name="Kozhikode, Kerala, India">Qibla Direction Calicut (Kerala)</button></li>
+          <li><button type="button" class="quick-city-pill hover:text-[#171717] dark:hover:text-white transition-colors text-left cursor-pointer" data-lat="28.6139" data-lng="77.2090" data-name="New Delhi, India">Qibla Direction Delhi</button></li>
+          <li><button type="button" class="quick-city-pill hover:text-[#171717] dark:hover:text-white transition-colors text-left cursor-pointer" data-lat="25.2048" data-lng="55.2708" data-name="Dubai, UAE">Qibla Direction Dubai</button></li>
+        </ul>
+      </div>
+
+      <!-- Column 4: Technology & Legal -->
+      <div>
+        <span class="text-xs font-mono uppercase tracking-wider text-[#888888] dark:text-[#737373] block mb-3">Platform & Legal</span>
+        <ul class="space-y-2 text-xs text-[#4d4d4d] dark:text-[#a1a1a1]">
+          <li><button type="button" id="footer-link-calibrate" class="hover:text-[#171717] dark:hover:text-white transition-colors text-left cursor-pointer">Sensor Calibration</button></li>
+          <li><button type="button" id="footer-link-settings" class="hover:text-[#171717] dark:hover:text-white transition-colors text-left cursor-pointer">Settings & Units</button></li>
+          <li><span class="text-[#888888] dark:text-[#737373]">WGS-84 Geodesic Math</span></li>
+          <li><span class="text-[#888888] dark:text-[#737373]">Astronomical Solar Engine</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="border-t border-[#ebebeb] dark:border-[#262626] pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#888888] dark:text-[#737373]">
+      <p>© {new Date().getFullYear()} CheckQibla.com. All rights reserved. Designed for precision and speed.</p>
+      <div class="flex items-center gap-4">
+        <span>Kaaba: 21.4225° N, 39.8262° E</span>
+        <span class="text-[#ebebeb] dark:text-[#333333]">|</span>
+        <span>Zero Ads & Tracking</span>
+      </div>
+    </div>
+  </div>
+</footer>

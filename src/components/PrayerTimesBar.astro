@@ -1,0 +1,92 @@
+---
+// PrayerTimesBar.astro - Real-time daily prayer schedule with dark mode support
+---
+
+<section id="section-prayer" class="scroll-mt-20 py-6 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
+  <div class="rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#121212] p-5 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0px_2px_4px_rgba(0,0,0,0.04)]">
+    <!-- Header with Countdown Banner -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="flex h-2 w-2 rounded-full bg-emerald-500"></span>
+          <h2 class="text-base sm:text-lg font-semibold tracking-tight text-[#171717] dark:text-white">Daily Prayer Times</h2>
+        </div>
+        <p class="text-xs text-[#4d4d4d] dark:text-[#a1a1a1] mt-0.5">
+          Calculated for your exact latitude & longitude using astronomical solar zenith formulas.
+        </p>
+      </div>
+
+      <!-- Live Countdown Card -->
+      <div class="inline-flex items-center gap-2.5 rounded-lg border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] px-3.5 py-2 shadow-xs">
+        <span class="text-xs font-medium text-[#4d4d4d] dark:text-[#a1a1a1]">Next: <strong id="next-prayer-name" class="text-[#171717] dark:text-white">--</strong></span>
+        <span class="h-3 w-[1px] bg-[#ebebeb] dark:bg-[#333333]"></span>
+        <div class="flex items-center gap-1.5 font-mono text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+          <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span id="next-prayer-countdown">--:--:--</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 Prayer Time Cards Grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
+      <!-- Fajr -->
+      <div id="prayer-card-fajr" class="prayer-card rounded-lg border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] p-3 text-center transition-all">
+        <span class="text-[11px] font-mono font-medium text-[#888888] dark:text-[#737373] uppercase block mb-1">Fajr</span>
+        <span id="prayer-time-fajr" class="text-base font-semibold text-[#171717] dark:text-white tracking-tight block">--:--</span>
+        <span class="text-[10px] text-[#888888] dark:text-[#737373] block mt-0.5">Dawn</span>
+      </div>
+
+      <!-- Sunrise -->
+      <div id="prayer-card-sunrise" class="prayer-card rounded-lg border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] p-3 text-center transition-all opacity-80">
+        <span class="text-[11px] font-mono font-medium text-[#888888] dark:text-[#737373] uppercase block mb-1">Sunrise</span>
+        <span id="prayer-time-sunrise" class="text-base font-semibold text-[#171717] dark:text-white tracking-tight block">--:--</span>
+        <span class="text-[10px] text-[#888888] dark:text-[#737373] block mt-0.5">Shurooq</span>
+      </div>
+
+      <!-- Dhuhr -->
+      <div id="prayer-card-dhuhr" class="prayer-card rounded-lg border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] p-3 text-center transition-all">
+        <span class="text-[11px] font-mono font-medium text-[#888888] dark:text-[#737373] uppercase block mb-1">Dhuhr</span>
+        <span id="prayer-time-dhuhr" class="text-base font-semibold text-[#171717] dark:text-white tracking-tight block">--:--</span>
+        <span class="text-[10px] text-[#888888] dark:text-[#737373] block mt-0.5">Midday</span>
+      </div>
+
+      <!-- Asr -->
+      <div id="prayer-card-asr" class="prayer-card rounded-lg border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] p-3 text-center transition-all">
+        <span class="text-[11px] font-mono font-medium text-[#888888] dark:text-[#737373] uppercase block mb-1">Asr</span>
+        <span id="prayer-time-asr" class="text-base font-semibold text-[#171717] dark:text-white tracking-tight block">--:--</span>
+        <span class="text-[10px] text-[#888888] dark:text-[#737373] block mt-0.5">Afternoon</span>
+      </div>
+
+      <!-- Maghrib -->
+      <div id="prayer-card-maghrib" class="prayer-card rounded-lg border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] p-3 text-center transition-all">
+        <span class="text-[11px] font-mono font-medium text-[#888888] dark:text-[#737373] uppercase block mb-1">Maghrib</span>
+        <span id="prayer-time-maghrib" class="text-base font-semibold text-[#171717] dark:text-white tracking-tight block">--:--</span>
+        <span class="text-[10px] text-[#888888] dark:text-[#737373] block mt-0.5">Sunset</span>
+      </div>
+
+      <!-- Isha -->
+      <div id="prayer-card-isha" class="prayer-card rounded-lg border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#171717] p-3 text-center transition-all">
+        <span class="text-[11px] font-mono font-medium text-[#888888] dark:text-[#737373] uppercase block mb-1">Isha</span>
+        <span id="prayer-time-isha" class="text-base font-semibold text-[#171717] dark:text-white tracking-tight block">--:--</span>
+        <span class="text-[10px] text-[#888888] dark:text-[#737373] block mt-0.5">Night</span>
+      </div>
+    </div>
+
+    <!-- Active Method Footnote -->
+    <div class="mt-3.5 flex flex-wrap items-center justify-between text-[11px] text-[#888888] dark:text-[#737373] border-t border-[#ebebeb] dark:border-[#262626] pt-2.5">
+      <div class="flex items-center gap-1">
+        <span>Calculation Method:</span>
+        <strong id="active-method-label" class="text-[#171717] dark:text-[#ededed] font-mono">Muslim World League (MWL)</strong>
+      </div>
+      <button
+        id="btn-open-prayer-settings"
+        type="button"
+        class="text-[#0070f3] dark:text-[#3291ff] hover:underline font-medium cursor-pointer"
+      >
+        Change Method / Asr School &rarr;
+      </button>
+    </div>
+  </div>
+</section>

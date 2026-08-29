@@ -1,0 +1,18 @@
+{
+  "name": "CheckQibla - Accurate Qibla Compass & Prayer Times",
+  "short_name": "CheckQibla",
+  "description": "Free web-based Qibla compass that helps users find the direction of the Kaaba for prayer. Works directly in browser and 100% offline.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#171717",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

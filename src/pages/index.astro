@@ -1,11 +1,62 @@
 ---
-import Welcome from '../components/Welcome.astro';
+// index.astro - Master page assembling CheckQibla.com
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Navbar from '../components/Navbar.astro';
+import AlertBanner from '../components/AlertBanner.astro';
+import HeroBand from '../components/HeroBand.astro';
+import QiblaCompass from '../components/QiblaCompass.astro';
+import LocationDetails from '../components/LocationDetails.astro';
+import InteractiveMap from '../components/InteractiveMap.astro';
+import PrayerTimesBar from '../components/PrayerTimesBar.astro';
+import SolarAlignmentGuide from '../components/SolarAlignmentGuide.astro';
+import SeoContent from '../components/SeoContent.astro';
+import Footer from '../components/Footer.astro';
+import TroubleshootingModal from '../components/TroubleshootingModal.astro';
+import SettingsModal from '../components/SettingsModal.astro';
+import LocationOverlay from '../components/LocationOverlay.astro';
 ---
 
 <Layout>
-	<Welcome />
+  <!-- Interactive Location Finding Loading Overlay & Diagnostic Modal -->
+  <LocationOverlay />
+
+  <!-- Sticky Nav -->
+  <Navbar />
+
+  <!-- Main Content Container -->
+  <main class="flex-1 flex flex-col items-center w-full">
+    <!-- Dismissible Alert Banner for Location / Sensor Messages -->
+    <AlertBanner />
+
+    <!-- Hero Band with Atmospheric Mesh Gradient -->
+    <HeroBand />
+
+    <!-- Flagship Qibla Compass Engine -->
+    <QiblaCompass />
+
+    <!-- 3-Up Metric Cards & City Search -->
+    <LocationDetails />
+
+    <!-- Geodesic Great-Circle Interactive Map -->
+    <InteractiveMap />
+
+    <!-- Real-Time Prayer Times & Countdown Bar -->
+    <PrayerTimesBar />
+
+    <!-- Solar & Shadow Physical Alignment Method -->
+    <SolarAlignmentGuide />
+
+    <!-- Comprehensive SEO Knowledge & FAQs -->
+    <SeoContent />
+  </main>
+
+  <!-- Clean 4-Column Footer -->
+  <Footer />
+
+  <!-- Modals -->
+  <TroubleshootingModal />
+  <SettingsModal />
+
+  <!-- Client Application Engine -->
+  <script src="../scripts/app.ts"></script>
 </Layout>

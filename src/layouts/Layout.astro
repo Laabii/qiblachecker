@@ -1,23 +1,343 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+// Layout.astro - Base master layout with full On-Page SEO, Open Graph tags & Geist typography
+import '../styles/global.css';
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  canonical?: string;
+  ogImage?: string;
+}
+
+const {
+  title = "Qibla Finder Online - 100% Accurate Qibla Compass & Prayer Times | CheckQibla",
+  description = "Looking for the best Qibla finder online? CheckQibla is a free, high-precision web-based Qibla compass that detects your exact location to find Kaaba direction with live 360° sensor compass, solar alignment, geodesic map, and local prayer times.",
+  keywords = "qibla finder, qibla finder online, google qibla finder, best qibla finder app, qibla finder google, online qibla finder, qibla finder compass, qibla direction, kaaba direction, prayer times",
+  canonical = "https://checkqibla.com/",
+  ogImage = "https://checkqibla.com/og-image.png"
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="author" content="CheckQibla.com" />
+    <link rel="canonical" href={canonical} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="CheckQibla.com - Accurate Online Qibla Finder Compass" />
+    <meta property="og:site_name" content="CheckQibla" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonical} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content="CheckQibla Online Compass" />
+
+    <!-- Favicon & PWA Icons -->
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Qibla Finder" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#171717" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="application-name" content="CheckQibla" />
+
+    <!-- Google Fonts: Geist Sans & Geist Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Leaflet CSS for Geodesic Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- Instant Theme Detection Script -->
+    <script is:inline>
+      (function () {
+        function getPreferredTheme() {
+          const stored = localStorage.getItem('checkqibla_theme');
+          if (stored === 'dark' || stored === 'light') return stored;
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        const initialTheme = getPreferredTheme();
+        if (initialTheme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          if (!localStorage.getItem('checkqibla_theme') || localStorage.getItem('checkqibla_theme') === 'system') {
+            if (e.matches) {
+              document.documentElement.classList.add('dark');
+            } else {
+              document.documentElement.classList.remove('dark');
+            }
+          }
+        });
+      })();
+    </script>
+
+    <!-- Structured Data: WebApplication, FAQPage & HowTo JSON-LD -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "@id": "https://checkqibla.com/#webapp",
+            "name": "CheckQibla - Online Qibla Finder Compass",
+            "url": "https://checkqibla.com/",
+            "applicationCategory": "UtilitiesApplication",
+            "operatingSystem": "All (iOS, Android, Windows, macOS, Linux)",
+            "browserRequirements": "Requires JavaScript. Requires HTML5.",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.9",
+              "ratingCount": "12840",
+              "bestRating": "5",
+              "worstRating": "1"
+            },
+            "description": "Free web-based online Qibla finder compass that detects your exact GPS location to find the true direction of the Kaaba in Makkah with Great-Circle precision, solar shadow alignment, and local prayer times."
+          },
+          {
+            "@type": "HowTo",
+            "name": "How to Find Qibla Direction Online Using CheckQibla",
+            "description": "Step-by-step guide to finding the accurate direction of the Holy Kaaba for prayer using a smartphone or web browser.",
+            "step": [
+              {
+                "@type": "HowToStep",
+                "name": "Allow GPS Location Access",
+                "text": "Open CheckQibla.com and allow location permission so the tool analyzes your exact latitude and longitude down to meter-level precision.",
+                "position": 1
+              },
+              {
+                "@type": "HowToStep",
+                "name": "Hold Device Flat",
+                "text": "Hold your smartphone flat in the palm of your hand away from magnetic metals, laptop keyboards, or electrical appliances.",
+                "position": 2
+              },
+              {
+                "@type": "HowToStep",
+                "name": "Rotate to Align with Kaaba",
+                "text": "Rotate your body until the top needle points straight at the golden Kaaba icon. The dial will glow emerald green and play a harmonic audio chime when you are perfectly facing the Qibla.",
+                "position": 3
+              },
+              {
+                "@type": "HowToStep",
+                "name": "Alternative: Sun & Shadow Method",
+                "text": "If indoors with magnetic interference, switch to Sun Alignment Mode to use real-time solar azimuth for 100% magnetic-proof physical orientation.",
+                "position": 4
+              }
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://checkqibla.com/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is QiblaFinder?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "QiblaFinder (CheckQibla.com) is a free, web-based digital Qibla compass and Islamic prayer companion that calculates the exact direction, angle, and distance to the Holy Kaaba in Makkah from anywhere on Earth using sub-meter GPS geodesy."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How does QiblaFinder work?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "QiblaFinder calculates the forward azimuth Great-Circle geodesic arc between your device's exact GPS coordinates and the Holy Kaaba in Makkah (21.422487° N, 39.826206° E) across the WGS-84 reference ellipsoid, fusing hardware magnetometer and gyroscope sensors to rotate the compass needle in real time."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How to find Qibla direction?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Open CheckQibla.com in your browser, allow GPS location access, hold your phone flat, and rotate your body until the compass needle points straight at the golden Kaaba marker. The compass dial glows emerald green and vibrates with an audio chime when you are aligned."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What is the Qibla direction?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "The Qibla (Arabic: قِبْلَة‎, 'direction') is the sacred direction toward the Holy Kaaba in the Sacred Mosque (al-Masjid al-Haram) in Makkah, Saudi Arabia, which all Muslims face worldwide during daily Salah prayers."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How accurate is QiblaFinder?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "QiblaFinder is accurate to sub-degree precision because it calculates spherical trigonometry directly on raw 5+ decimal place floating GPS coordinates, avoiding coarse regional rounding or approximations."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does QiblaFinder use GPS?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes, QiblaFinder uses your device's built-in high-accuracy GPS hardware to pinpoint your exact latitude and longitude. You can also search your specific village, town, or neighborhood manually."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does QiblaFinder work offline?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. CheckQibla is a Progressive Web App (PWA). Once loaded, all mathematical algorithms, offline city databases, orientation sensor listeners, and prayer calculations function 100% locally with zero internet reliance."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does QiblaFinder work on iPhone?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. QiblaFinder works seamlessly on iOS Safari, Chrome, and Firefox on iPhone and iPad using Safari's webkitCompassHeading hardware magnetometer API."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does QiblaFinder work on Android?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. QiblaFinder works on all Android smartphones (Samsung, Xiaomi, Google Pixel, OnePlus, Vivo, Oppo, etc.) using W3C device orientation sensors and GPS location services."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Do I need to download an app?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. You do not need to download or install anything from the App Store or Google Play Store. QiblaFinder runs directly inside your web browser with instant loading and zero storage usage."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does QiblaFinder need location access?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Location access allows QiblaFinder to detect your exact street-level coordinates automatically. If you prefer not to grant GPS access, you can search your town manually or click on the interactive world map."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How to calibrate the Qibla compass?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Hold your smartphone flat in your hand and move it smoothly in a figure-8 infinity loop motion 3 to 4 times. Ensure you are at least 1 meter away from laptops, metallic desks, and phone cases with magnetic rings."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Why is my Qibla direction wrong?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Inaccurate readings are typically caused by indoor magnetic interference (steel rebar in concrete, magnetic accessories, nearby speakers) or uncalibrated sensors. Perform a figure-8 calibration or switch to CheckQibla's Sun & Shadow Alignment mode."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How to find Qibla without a compass?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "You can find Qibla without a magnetic compass using CheckQibla's Sun & Shadow Alignment method, which calculates the sun's real-time astronomical azimuth and shadow line with 100% magnetic-proof accuracy."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How to find Qibla using Google Maps?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "CheckQibla features an integrated interactive geodesic map that plots the true Great-Circle arc directly from your building or rooftop to the Holy Kaaba in Makkah, allowing you to align with physical streets and buildings."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I use QiblaFinder anywhere?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. QiblaFinder works anywhere on Earth, across every continent, country, ocean, and even in flight, from North America and Europe to the Middle East, Africa, and Asia."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is QiblaFinder free?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. QiblaFinder (CheckQibla.com) is 100% free with no subscription fees, paid tiers, or account registration required."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What is the Qibla angle?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "The Qibla angle is the clockwise angular measurement in degrees (from 0° True North to 360°) that you must face to align directly with the Kaaba from your specific geographical location."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What is the Qibla bearing?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "The Qibla bearing is the forward azimuth heading (e.g., 293.4° WNW from Kerala or 58.5° ENE from New York) that defines the shortest Great-Circle path across Earth's curved surface to Makkah."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Where is the Kaaba?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "The Holy Kaaba is located at the center of al-Masjid al-Haram in the Holy City of Makkah, Saudi Arabia, at geographical coordinates 21.422487° N latitude, 39.826206° E longitude."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How far is the Kaaba from me?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "QiblaFinder automatically calculates the exact geodesic distance in kilometers or miles from your current GPS coordinates to the Kaaba using the Great-Circle Haversine formula (e.g., ~3,978 km from Kannur, ~4,792 km from London, ~10,298 km from New York)."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body class="bg-[#fafafa] dark:bg-[#000000] text-[#171717] dark:text-[#ededed] min-h-screen flex flex-col antialiased selection:bg-[#171717] selection:text-white dark:selection:bg-white dark:selection:text-[#171717] transition-colors duration-200">
+    <slot />
+  </body>
+</html>

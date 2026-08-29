@@ -1,0 +1,97 @@
+---
+// Navbar.astro - Vercel-inspired sticky navigation with dark/light mode toggle
+---
+
+<header class="sticky top-0 z-40 w-full border-b border-[#ebebeb] dark:border-[#262626] bg-white/90 dark:bg-[#0a0a0a]/90 backdrop-blur-md transition-colors duration-200">
+  <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <!-- Brand Logo -->
+    <a href="/" class="flex items-center gap-2.5 text-decoration-none group">
+      <div class="flex h-9 w-9 items-center justify-center rounded-lg shadow-sm transition-transform group-hover:scale-105 overflow-hidden">
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" class="h-full w-full">
+          <rect width="512" height="512" fill="#000000" rx="128" ry="128"/>
+          <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-family="Bookman, Georgia, serif" font-weight="bold" fill="#804000" font-size="181.8427644063752">Qibla </text>
+        </svg>
+      </div>
+      <div class="flex flex-col">
+        <div class="flex items-center gap-1.5">
+          <span class="text-base font-semibold tracking-tight text-[#171717] dark:text-[#ededed]">CheckQibla</span>
+          <span class="rounded-full bg-[#fafafa] dark:bg-[#171717] border border-[#ebebeb] dark:border-[#262626] px-1.5 py-0.2 text-[10px] font-mono font-medium text-[#4d4d4d] dark:text-[#a1a1a1]">v2.0</span>
+        </div>
+        <span class="text-[11px] font-mono text-[#888888] dark:text-[#737373] -mt-0.5">Accurate Qibla Compass</span>
+      </div>
+    </a>
+
+    <!-- Center Badges: Sensor & Mode status (desktop) -->
+    <div class="hidden md:flex items-center gap-2">
+      <div id="nav-gps-badge" class="inline-flex items-center gap-1.5 rounded-full border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#121212] px-3 py-1 text-xs font-mono text-[#4d4d4d] dark:text-[#a1a1a1]">
+        <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span id="nav-gps-text">Locating GPS...</span>
+      </div>
+      <div id="nav-mode-badge" class="inline-flex items-center gap-1.5 rounded-full border border-[#ebebeb] dark:border-[#262626] bg-[#fafafa] dark:bg-[#121212] px-3 py-1 text-xs font-mono text-[#4d4d4d] dark:text-[#a1a1a1]">
+        <svg class="h-3.5 w-3.5 text-[#888888]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+        <span id="nav-mode-text">360° Compass</span>
+      </div>
+    </div>
+
+    <!-- Right Actions -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <!-- Dark/Light Mode Switcher Button -->
+      <button
+        id="btn-theme-toggle"
+        type="button"
+        class="inline-flex items-center justify-center h-8 w-8 rounded-md border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#171717] text-[#171717] dark:text-[#ededed] shadow-xs hover:bg-[#fafafa] dark:hover:bg-[#222222] transition-colors"
+        title="Toggle Light / Dark Mode"
+        aria-label="Toggle Dark Mode"
+      >
+        <!-- Sun icon (shown in dark mode) -->
+        <svg id="theme-icon-sun" class="hidden h-4 w-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <!-- Moon icon (shown in light mode) -->
+        <svg id="theme-icon-moon" class="h-4 w-4 text-[#4d4d4d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      </button>
+
+      <!-- Recalibrate / Help Button -->
+      <button
+        id="btn-troubleshoot"
+        type="button"
+        class="inline-flex items-center gap-1.5 rounded-md border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#171717] px-2.5 py-1.5 text-xs font-medium text-[#171717] dark:text-[#ededed] shadow-xs hover:bg-[#fafafa] dark:hover:bg-[#222222] transition-colors"
+        title="Compass Sensor Diagnostics & Calibration"
+      >
+        <svg class="h-3.5 w-3.5 text-[#888888]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+        </svg>
+        <span class="hidden sm:inline">Calibrate</span>
+      </button>
+
+      <!-- Settings Button -->
+      <button
+        id="btn-open-settings"
+        type="button"
+        class="inline-flex items-center gap-1.5 rounded-md border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#171717] p-2 text-[#171717] dark:text-[#ededed] shadow-xs hover:bg-[#fafafa] dark:hover:bg-[#222222] transition-colors"
+        aria-label="Settings"
+      >
+        <svg class="h-4 w-4 text-[#4d4d4d] dark:text-[#a1a1a1]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      </button>
+
+      <!-- Share Button -->
+      <button
+        id="btn-share-app"
+        type="button"
+        class="inline-flex items-center gap-1.5 rounded-full bg-[#171717] dark:bg-white px-3.5 py-1.5 text-xs font-semibold text-white dark:text-[#171717] shadow-xs hover:bg-[#2d2d2d] dark:hover:bg-[#e0e0e0] transition-colors"
+      >
+        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+        </svg>
+        <span>Share</span>
+      </button>
+    </div>
+  </div>
+</header>
