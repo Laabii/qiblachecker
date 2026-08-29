@@ -1239,17 +1239,6 @@ class QiblaApp {
       this.startCompassSensors();
     });
 
-    // Nearby Mosques on Google Maps
-    document.getElementById('btn-open-nearby-mosques')?.addEventListener('click', () => {
-      this.openNearbyMosques();
-    });
-    document.getElementById('btn-map-nearby-mosques')?.addEventListener('click', () => {
-      this.openNearbyMosques();
-    });
-    document.getElementById('btn-hero-nearby-mosques')?.addEventListener('click', () => {
-      this.openNearbyMosques();
-    });
-
     // Modals
     document.getElementById('btn-troubleshoot')?.addEventListener('click', () => this.showTroubleshootModal());
     document.getElementById('footer-link-calibrate')?.addEventListener('click', (e) => {
@@ -1557,16 +1546,6 @@ class QiblaApp {
     const btnCompassText = document.getElementById('btn-enable-compass-text');
     if (btnCompassText) btnCompassText.textContent = this.isCompassActive ? t.compassActive : t.startCompass;
 
-    const btnHeroMosques = document.getElementById('btn-hero-nearby-mosques');
-    if (btnHeroMosques) {
-      btnHeroMosques.innerHTML = `<span>🕌</span><span>${t.nearbyMosques}</span>`;
-    }
-
-    const btnSearchCity = document.getElementById('btn-search-city-trigger');
-    if (btnSearchCity) {
-      btnSearchCity.innerHTML = `<svg class="h-4 w-4 text-[#888888]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg><span>${this.currentLanguage === 'ar' ? 'بحث' : this.currentLanguage === 'ml' ? 'തിരയുക' : 'Search City'}</span>`;
-    }
-
     const btnUseGps = document.getElementById('btn-use-gps');
     if (btnUseGps) {
       btnUseGps.innerHTML = `<svg class="w-3.5 h-3.5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>${t.useCurrentGps}</span>`;
@@ -1575,11 +1554,6 @@ class QiblaApp {
     const btnSaveLoc = document.getElementById('btn-save-current-location');
     if (btnSaveLoc) {
       btnSaveLoc.innerHTML = `<span>⭐</span><span>${t.saveThisPlace}</span>`;
-    }
-
-    const btnMosques = document.getElementById('btn-open-nearby-mosques');
-    if (btnMosques) {
-      btnMosques.innerHTML = `<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span>${t.findMosquesBtn}</span><svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>`;
     }
   }
 

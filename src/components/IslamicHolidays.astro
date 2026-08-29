@@ -87,37 +87,4 @@ const todayGregorian = now.toLocaleDateString('en-GB', { day: 'numeric', month: 
       ))}
     </div>
   </div>
-
-  <!-- Find Nearby Mosques Quick Action Card -->
-  <div class="mt-6 rounded-2xl border border-[#ebebeb] dark:border-[#262626] bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent dark:from-emerald-950/40 dark:via-teal-950/20 p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
-    <div class="flex items-center gap-3.5">
-      <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-600 text-white text-2xl shadow-md shrink-0">
-        🕌
-      </div>
-      <div>
-        <h3 class="text-base font-bold text-[#171717] dark:text-white">
-          Find Mosques Near You
-        </h3>
-        <p class="text-xs text-[#666666] dark:text-[#a1a1a1] mt-0.5 leading-relaxed">
-          Open live Google Maps to view all nearby Masjids, walking directions, and prayer facilities from your exact GPS location.
-        </p>
-      </div>
-    </div>
-
-    <!-- Action Button -->
-    <button
-      id="btn-open-nearby-mosques"
-      type="button"
-      class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg transition-all transform active:scale-98 shrink-0 cursor-pointer"
-    >
-      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-      <span>Find Mosques on Google Maps</span>
-      <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-      </svg>
-    </button>
-  </div>
 </section>
