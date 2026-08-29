@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qibla Logo Previews (DM Serif Display)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #0c0c0e;
+      color: #ededed;
+      font-family: 'Geist', -apple-system, sans-serif;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    p.subtitle {
+      color: #888888;
+      font-size: 14px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 1000px;
+      width: 100%;
+    }
+    .card {
+      background: #141416;
+      border: 1px solid #262629;
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: #404044;
+    }
+    .preview-box {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #ffffff;
+    }
+    .card-desc {
+      font-size: 12px;
+      color: #71717a;
+      line-height: 1.5;
+    }
+    .dm-serif {
+      font-family: 'DM Serif Display', serif;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Qibla Logo Variations</h1>
+  <p class="subtitle">Rendered using <code>DM Serif Display</code> font with "Qibla" in the center</p>
+
+  <div class="grid">
+    
+    <!-- Option 1: Classic Obsidian & Pure Gold (Recommended) -->
+    <div class="card">
+      <div class="preview-box">
+        <svg viewBox="0 0 512 512" width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="goldGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FCD34D" />
+              <stop offset="50%" stop-color="#D97706" />
+              <stop offset="100%" stop-color="#B45309" />
+            </linearGradient>
+          </defs>
+          <rect width="512" height="512" fill="#0D0D0E" rx="128" ry="128" />
+          <rect x="12" y="12" width="488" height="488" fill="none" stroke="url(#goldGrad1)" stroke-width="4" stroke-opacity="0.3" rx="116" ry="116" />
+          <text x="50%" y="54%" dominant-baseline="central" text-anchor="middle" font-family="'DM Serif Display', serif" fill="url(#goldGrad1)" font-size="160" letter-spacing="1">Qibla</text>
+        </svg>
+      </div>
+      <div class="card-title">Option 1: Gold on Obsidian (Active)</div>
+      <div class="card-desc">Deep matte black background with metallic warm gold gradient and subtle gold border.</div>
+      <div style="margin-top: 14px; display: flex; gap: 8px;">
+        <a href="/favicon.svg" download="qibla-logo.svg" style="background: #27272a; color: #ededed; text-decoration: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 500;">Download SVG</a>
+        <a href="/web-app-manifest-512x512.png" download="qibla-logo-512.png" style="background: #d97706; color: #ffffff; text-decoration: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 500;">Download PNG</a>
+      </div>
+    </div>
+
+    <!-- Option 2: Clean Matte Black & Crisp White -->
+    <div class="card">
+      <div class="preview-box">
+        <svg viewBox="0 0 512 512" width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+          <rect width="512" height="512" fill="#000000" rx="128" ry="128" />
+          <rect x="8" y="8" width="496" height="496" fill="none" stroke="#262626" stroke-width="6" rx="120" ry="120" />
+          <text x="50%" y="54%" dominant-baseline="central" text-anchor="middle" font-family="'DM Serif Display', serif" fill="#FFFFFF" font-size="160" letter-spacing="0.5">Qibla</text>
+        </svg>
+      </div>
+      <div class="card-title">Option 2: Minimalist Monochrome</div>
+      <div class="card-desc">Pure black background with crisp white typography and subtle dark gray border.</div>
+    </div>
+
+    <!-- Option 3: Deep Emerald & Gold -->
+    <div class="card">
+      <div class="preview-box">
+        <svg viewBox="0 0 512 512" width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="emeraldBg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#064E3B" />
+              <stop offset="100%" stop-color="#022C22" />
+            </linearGradient>
+            <linearGradient id="goldGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FDE68A" />
+              <stop offset="100%" stop-color="#F59E0B" />
+            </linearGradient>
+          </defs>
+          <rect width="512" height="512" fill="url(#emeraldBg)" rx="128" ry="128" />
+          <text x="50%" y="54%" dominant-baseline="central" text-anchor="middle" font-family="'DM Serif Display', serif" fill="url(#goldGlow)" font-size="160" letter-spacing="1">Qibla</text>
+        </svg>
+      </div>
+      <div class="card-title">Option 3: Islamic Emerald & Gold</div>
+      <div class="card-desc">Rich Islamic deep emerald green gradient backdrop with brilliant gold typography.</div>
+    </div>
+
+    <!-- Option 4: Amber Copper on Matte Black -->
+    <div class="card">
+      <div class="preview-box">
+        <svg viewBox="0 0 512 512" width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+          <rect width="512" height="512" fill="#0A0A0B" rx="128" ry="128" />
+          <text x="50%" y="54%" dominant-baseline="central" text-anchor="middle" font-family="'DM Serif Display', serif" fill="#D97706" font-size="160">Qibla</text>
+        </svg>
+      </div>
+      <div class="card-title">Option 4: Warm Bronze / Copper</div>
+      <div class="card-desc">Warm honey amber/bronze text on matte charcoal background.</div>
+    </div>
+
+  </div>
+
+</body>
+</html>
