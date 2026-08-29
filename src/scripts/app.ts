@@ -1224,6 +1224,14 @@ class QiblaApp {
       this.startCompassSensors();
     });
 
+    // Nearby Mosques on Google Maps
+    document.getElementById('btn-open-nearby-mosques')?.addEventListener('click', () => {
+      this.openNearbyMosques();
+    });
+    document.getElementById('btn-map-nearby-mosques')?.addEventListener('click', () => {
+      this.openNearbyMosques();
+    });
+
     // Modals
     document.getElementById('btn-troubleshoot')?.addEventListener('click', () => this.showTroubleshootModal());
     document.getElementById('footer-link-calibrate')?.addEventListener('click', (e) => {
@@ -1511,6 +1519,12 @@ class QiblaApp {
       m.classList.add('hidden');
       m.classList.remove('flex');
     }
+  }
+
+  public openNearbyMosques(): void {
+    // Open Google Maps search for mosques near current exact lat,lng
+    const url = `https://www.google.com/maps/search/mosques/@${this.userLat},${this.userLng},14z`;
+    window.open(url, '_blank', 'noopener,noreferrer');
   }
 
   private registerServiceWorker(): void {
