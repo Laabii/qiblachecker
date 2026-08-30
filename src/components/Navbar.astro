@@ -1,50 +1,85 @@
 ---
-// Navbar.astro - Vercel-inspired sticky navigation with dark/light mode toggle
+// Navbar.astro - Vercel-inspired sticky navigation with dark/light mode toggle and responsive mobile back actions
+const pathname = (Astro.url.pathname.replace(/\/$/, '') || '/') as string;
+const isHome = pathname === '/' || pathname === '';
+const isPrayer = pathname === '/prayer';
+const isCalendar = pathname === '/calendar';
 ---
 
-<header class="relative z-40 w-full border-b border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#0a0a0a] transition-colors duration-200">
+<header class="sticky top-0 z-40 w-full border-b border-[#ebebeb] dark:border-[#262626] bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-md transition-colors duration-200">
   <div class="mx-auto flex h-14 sm:h-16 max-w-7xl items-center justify-between px-3 sm:px-6 lg:px-8">
-    <!-- Brand Logo -->
-    <a href="/" class="flex items-center gap-2 text-decoration-none group shrink-0 min-w-0">
-      <div class="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg shadow-sm transition-transform group-hover:scale-105 overflow-hidden shrink-0">
-        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" class="h-full w-full">
-          <defs>
-            <linearGradient id="navGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#FCD34D" />
-              <stop offset="50%" stop-color="#D97706" />
-              <stop offset="100%" stop-color="#B45309" />
-            </linearGradient>
-          </defs>
-          <rect width="512" height="512" fill="#0D0D0E" rx="128" ry="128"/>
-          <rect x="12" y="12" width="488" height="488" fill="none" stroke="url(#navGoldGrad)" stroke-width="8" stroke-opacity="0.35" rx="116" ry="116" />
-          <text x="50%" y="54%" dominant-baseline="central" text-anchor="middle" font-family="'DM Serif Display', Georgia, serif" fill="url(#navGoldGrad)" font-size="160" letter-spacing="1">Qibla</text>
-        </svg>
-      </div>
-      <div class="flex flex-col min-w-0">
-        <span class="text-sm sm:text-base font-semibold tracking-tight text-[#171717] dark:text-[#ededed] whitespace-nowrap">Qibla Locator</span>
-        <span class="text-[10px] sm:text-[11px] font-mono text-[#888888] dark:text-[#737373] -mt-0.5 hidden md:block">Accurate Qibla Compass</span>
-      </div>
-    </a>
+    <!-- Brand Logo / Back Button on Mobile -->
+    <div class="flex items-center gap-2 min-w-0">
+      {!isHome && (
+        <a
+          href="/"
+          class="md:hidden inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[#f5f5f5] dark:bg-[#1f1f1f] text-[#171717] dark:text-white border border-[#ebebeb] dark:border-[#2f2f2f] hover:bg-[#eaeaea] dark:hover:bg-[#2a2a2a] transition-all shadow-2xs active:scale-95"
+          title="Back to Qibla Compass"
+        >
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span class="tracking-tight">Compass</span>
+        </a>
+      )}
+
+      <!-- Brand Logo Link -->
+      <a href="/" class={`flex items-center gap-2 text-decoration-none group shrink-0 min-w-0 ${!isHome ? 'hidden sm:flex' : 'flex'}`}>
+        <div class="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg shadow-sm transition-transform group-hover:scale-105 overflow-hidden shrink-0">
+          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" class="h-full w-full">
+            <defs>
+              <linearGradient id="navGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FCD34D" />
+                <stop offset="50%" stop-color="#D97706" />
+                <stop offset="100%" stop-color="#B45309" />
+              </linearGradient>
+            </defs>
+            <rect width="512" height="512" fill="#0D0D0E" rx="128" ry="128"/>
+            <rect x="12" y="12" width="488" height="488" fill="none" stroke="url(#navGoldGrad)" stroke-width="8" stroke-opacity="0.35" rx="116" ry="116" />
+            <text x="50%" y="54%" dominant-baseline="central" text-anchor="middle" font-family="'DM Serif Display', Georgia, serif" fill="url(#navGoldGrad)" font-size="160" letter-spacing="1">Qibla</text>
+          </svg>
+        </div>
+        <div class="flex flex-col min-w-0">
+          <span class="text-sm sm:text-base font-semibold tracking-tight text-[#171717] dark:text-[#ededed] whitespace-nowrap">Qibla Locator</span>
+          <span class="text-[10px] sm:text-[11px] font-mono text-[#888888] dark:text-[#737373] -mt-0.5 hidden md:block">Accurate Qibla Compass</span>
+        </div>
+      </a>
+    </div>
 
     <!-- Center Nav Links (Desktop & Tablet) -->
-    <nav class="hidden md:flex items-center gap-1 text-xs font-medium">
+    <nav class="hidden md:flex items-center gap-1.5 text-xs font-medium p-1 rounded-full bg-[#fafafa] dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626]">
       <a
         href="/"
-        class="px-2.5 py-1.5 rounded-full border border-transparent hover:border-[#ebebeb] dark:hover:border-[#262626] text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#171717] transition-all"
+        class={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
+          isHome
+            ? 'bg-white dark:bg-[#222222] text-[#171717] dark:text-white font-semibold shadow-xs border border-[#e5e5e5] dark:border-[#333333]'
+            : 'text-[#555555] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-white/50 dark:hover:bg-[#1a1a1a]'
+        }`}
       >
-        🧭 Compass
+        <span>🧭</span>
+        <span>Compass</span>
       </a>
       <a
         href="/prayer"
-        class="px-2.5 py-1.5 rounded-full border border-transparent hover:border-[#ebebeb] dark:hover:border-[#262626] text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#171717] transition-all"
+        class={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
+          isPrayer
+            ? 'bg-white dark:bg-[#222222] text-[#171717] dark:text-white font-semibold shadow-xs border border-[#e5e5e5] dark:border-[#333333]'
+            : 'text-[#555555] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-white/50 dark:hover:bg-[#1a1a1a]'
+        }`}
       >
-        🕌 Prayer Times
+        <span>🕌</span>
+        <span>Prayer Times</span>
       </a>
       <a
         href="/calendar"
-        class="px-2.5 py-1.5 rounded-full border border-transparent hover:border-[#ebebeb] dark:hover:border-[#262626] text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#171717] transition-all"
+        class={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
+          isCalendar
+            ? 'bg-white dark:bg-[#222222] text-[#171717] dark:text-white font-semibold shadow-xs border border-[#e5e5e5] dark:border-[#333333]'
+            : 'text-[#555555] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-white/50 dark:hover:bg-[#1a1a1a]'
+        }`}
       >
-        🌙 Calendar
+        <span>🌙</span>
+        <span>Calendar</span>
       </a>
     </nav>
 

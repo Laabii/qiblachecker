@@ -1250,6 +1250,7 @@ class QiblaApp {
     document.getElementById('btn-recalibrate-action')?.addEventListener('click', () => this.hideTroubleshootModal());
 
     document.getElementById('btn-open-settings')?.addEventListener('click', () => this.showSettingsModal());
+    document.getElementById('btn-bottom-nav-settings')?.addEventListener('click', () => this.showSettingsModal());
     document.getElementById('footer-link-settings')?.addEventListener('click', (e) => {
       e.preventDefault();
       this.showSettingsModal();
